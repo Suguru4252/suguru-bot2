@@ -2,224 +2,517 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AI IMAGE GENERATOR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Мой Говорящий Давид - Виртуальный питомец</title>
     <style>
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            margin: 0;
             min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', 'Poppins', 'Comic Neue', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 10px;
+            padding: 20px;
         }
-        
-        .app-container {
+
+        /* Основной контейнер игры */
+        .game-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 20px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .game-card {
+            max-width: 500px;
             width: 100%;
-            max-width: 400px;
-            height: 95vh;
-            background: white;
-            border-radius: 30px;
+            background: #fff9f0;
+            border-radius: 50px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
         }
-        
-        .header {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            color: white;
+
+        /* Шапка со статистикой */
+        .stats-bar {
+            background: #ffd966;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-bottom: 4px solid #e6b422;
+        }
+
+        .stat {
+            background: white;
+            border-radius: 40px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+        }
+
+        .stat span:first-child {
+            font-size: 1.3rem;
+        }
+
+        .hunger-bar, .happy-bar {
+            width: 80px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .hunger-fill {
+            height: 100%;
+            width: 100%;
+            background: #4caf50;
+            transition: width 0.3s;
+        }
+
+        .happy-fill {
+            height: 100%;
+            width: 100%;
+            background: #ff9800;
+            transition: width 0.3s;
+        }
+
+        /* Область персонажа */
+        .character-area {
+            background: linear-gradient(145deg, #fce5cd, #f8d9b0);
             padding: 20px;
             text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .prompt-input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 15px;
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
-        
-        .btn {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
-            width: 100%;
-            margin: 10px 0;
+            position: relative;
             cursor: pointer;
         }
-        
-        .loading {
+
+        #davidAvatar {
+            width: 220px;
+            height: 220px;
+            margin: 10px auto;
+            transition: transform 0.1s ease;
+            filter: drop-shadow(8px 12px 12px rgba(0,0,0,0.2));
+        }
+
+        .tap-effect {
+            animation: bounce 0.2s ease;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        /* Облачность для речи */
+        .speech-bubble {
+            background: white;
+            border-radius: 40px;
+            padding: 12px 20px;
+            display: inline-block;
+            max-width: 80%;
+            margin: 10px auto;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #5a3e2b;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid #ffb347;
+            animation: fadeInUp 0.3s;
+        }
+
+        /* Панель действий */
+        .action-panel {
+            padding: 20px;
+            background: #fef3e2;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+            border-bottom: 1px solid #ffd89a;
+        }
+
+        .action-btn {
+            background: #ffb347;
+            border: none;
+            padding: 12px 8px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            box-shadow: 0 4px 0 #c16f1a;
+        }
+
+        .action-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #c16f1a;
+        }
+
+        .action-btn span:first-child {
+            font-size: 1.5rem;
+        }
+
+        /* Мини-игра и одежда */
+        .extra-section {
+            padding: 15px 20px 20px;
+            background: #fff4e8;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mini-game {
+            background: #ffe0b5;
+            border-radius: 40px;
+            padding: 12px;
             text-align: center;
-            padding: 40px;
         }
-        
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3b82f6;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+
+        .click-game-btn {
+            background: #8b5a2b;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .outfit-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
         }
-        
-        .result-image {
-            width: 100%;
-            border-radius: 15px;
-            margin: 20px 0;
+
+        .outfit {
+            background: #d9b48b;
+            padding: 6px 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.1s;
         }
-        
-        .hidden {
-            display: none;
+
+        footer {
+            text-align: center;
+            padding: 12px;
+            font-size: 0.7rem;
+            background: #f7e5d2;
+            color: #7a5a3a;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="header">
-            <h1>🎨 AI GENERATOR</h1>
-            <p>Работает 100%</p>
+<div class="game-container">
+    <div class="game-card">
+        <!-- Статистика -->
+        <div class="stats-bar">
+            <div class="stat"><span>🍔</span> Сытость
+                <div class="hunger-bar"><div class="hunger-fill" id="hungerFill"></div></div>
+                <span id="hungerValue">100</span>%
+            </div>
+            <div class="stat"><span>😊</span> Настроение
+                <div class="happy-bar"><div class="happy-fill" id="happyFill"></div></div>
+                <span id="happyValue">100</span>%
+            </div>
+            <div class="stat"><span>⭐</span> Монетки <span id="coins">0</span></div>
         </div>
-        
-        <div class="content" id="content">
-            <!-- Экран ввода -->
-            <div id="inputScreen">
-                <input type="text" id="prompt" class="prompt-input" placeholder="Например: черный кот" value="черный кот">
-                <button class="btn" onclick="startGeneration()">🚀 СГЕНЕРИРОВАТЬ</button>
+
+        <!-- Персонаж -->
+        <div class="character-area" id="characterArea">
+            <img id="davidAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23FBC490'/%3E%3Ccircle cx='35' cy='42' r='4' fill='%234D2E1B'/%3E%3Ccircle cx='65' cy='42' r='4' fill='%234D2E1B'/%3E%3Cpath d='M38 62 Q50 72 62 62' stroke='%238B4513' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Crect x='44' y='18' width='12' height='20' fill='%234D2E1B'/%3E%3C/svg%3E" alt="Давид">
+            <div id="speechText" class="speech-bubble">Привет! Я Давид 😊</div>
+        </div>
+
+        <!-- Основные действия -->
+        <div class="action-panel">
+            <button class="action-btn" id="feedBtn"><span>🍕</span> Покормить</button>
+            <button class="action-btn" id="playBtn"><span>⚽</span> Поиграть</button>
+            <button class="action-btn" id="cleanBtn"><span>🚿</span> Помыть</button>
+            <button class="action-btn" id="petBtn"><span>✋</span> Погладить</button>
+        </div>
+
+        <!-- Дополнительные функции: мини-игра и смена одежды -->
+        <div class="extra-section">
+            <div class="mini-game">
+                <strong>🎮 Накорми Давида печеньками 🍪</strong>
+                <div>Кликни, чтобы заработать монетки и поднять сытость!</div>
+                <button class="click-game-btn" id="cookieGameBtn">🍪 +1 Сытость / +2 Монетки</button>
             </div>
-            
-            <!-- Экран загрузки -->
-            <div id="loadingScreen" class="loading hidden">
-                <div class="spinner"></div>
-                <p>Генерация...</p>
-            </div>
-            
-            <!-- Экран результата -->
-            <div id="resultScreen" class="hidden">
-                <img id="resultImage" class="result-image" src="" alt="Generated">
-                <button class="btn" onclick="downloadImage()">💾 СКАЧАТЬ</button>
-                <button class="btn" style="background:#f1f5f9; color:#333;" onclick="newImage()">🔄 НОВАЯ</button>
+            <div>
+                <strong>👕 Стиль Давида:</strong>
+                <div class="outfit-buttons">
+                    <div class="outfit" data-outfit="classic">🟤 Классика</div>
+                    <div class="outfit" data-outfit="cool">😎 Крутой</div>
+                    <div class="outfit" data-outfit="cute">🐻 Милашка</div>
+                </div>
             </div>
         </div>
+        <footer>💬 Нажми на Давида - он скажет что-то! Каждые 30 сек параметры снижаются</footer>
     </div>
-    
-    <script>
-        // ========== РАБОЧИЕ API (ВЫБЕРИ ОДИН) ==========
-        
-        // API 1: Craiyon (вообще без ключа, работает всегда)
-        async function generateCraiyon(prompt) {
-            const response = await fetch('https://api.craiyon.com/v3', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    prompt: prompt,
-                    negative_prompt: 'nsfw, ugly',
-                    style: 'art'
-                })
-            });
-            
-            const data = await response.json();
-            if (data.images && data.images[0]) {
-                return 'data:image/jpeg;base64,' + data.images[0];
+</div>
+
+<script>
+    // ---------- Игровые параметры ----------
+    let hunger = 100;       // сытость 0-100
+    let happiness = 100;    // настроение
+    let coins = 0;
+
+    // Элементы DOM
+    const hungerFill = document.getElementById('hungerFill');
+    const happyFill = document.getElementById('happyFill');
+    const hungerValueSpan = document.getElementById('hungerValue');
+    const happyValueSpan = document.getElementById('happyValue');
+    const coinsSpan = document.getElementById('coins');
+    const davidImg = document.getElementById('davidAvatar');
+    const speechDiv = document.getElementById('speechText');
+    const characterArea = document.getElementById('characterArea');
+
+    // Фразы для разного настроения
+    const happyPhrases = [
+        "Я супер счастлив! 🎉", "Обнимашки? 🤗", "Ты мой лучший друг! ❤️", 
+        "Какой классный день!", "Давай играть!", "Спасибо, друг!"
+    ];
+    const normalPhrases = [
+        "Приветик :)", "Погладь меня!", "Хочу кушать...", "Скучно... поиграем?",
+        "Ты где был?", "Монетки блестят ✨"
+    ];
+    const sadPhrases = [
+        "Мне грустно... 💔", "Покорми меня, пожалуйста", "Я голодный :(",
+        "Настроение упало...", "Поиграй со мной!", "Обними меня..."
+    ];
+    const hungryPhrases = [
+        "Очень хочу есть! 🍔", "Живот урчит...", "Дай поесть!", 
+        "Пицца? Суши? Что угодно!", "Голодный Давид 😭"
+    ];
+
+    // Смена аватара (одежды / стиля)
+    const outfits = {
+        classic: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23FBC490'/%3E%3Ccircle cx='35' cy='42' r='4' fill='%234D2E1B'/%3E%3Ccircle cx='65' cy='42' r='4' fill='%234D2E1B'/%3E%3Cpath d='M38 62 Q50 72 62 62' stroke='%238B4513' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Crect x='44' y='18' width='12' height='20' fill='%234D2E1B'/%3E%3C/svg%3E",
+        cool: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23FBC490'/%3E%3Ccircle cx='35' cy='42' r='4' fill='%234D2E1B'/%3E%3Ccircle cx='65' cy='42' r='4' fill='%234D2E1B'/%3E%3Cpath d='M38 62 Q50 72 62 62' stroke='%238B4513' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Cpolygon points='44,20 56,20 60,30 40,30' fill='black'/%3E%3Ctext x='45' y='85' font-size='12' fill='gray'%3E😎%3C/text%3E%3C/svg%3E",
+        cute: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23FBC490'/%3E%3Ccircle cx='35' cy='42' r='4' fill='%234D2E1B'/%3E%3Ccircle cx='65' cy='42' r='4' fill='%234D2E1B'/%3E%3Cpath d='M38 62 Q50 72 62 62' stroke='%23FF69B4' stroke-width='3' fill='none'/%3E%3Ccircle cx='50' cy='28' r='6' fill='pink'/%3E%3C/svg%3E"
+    };
+
+    function setOutfit(style) {
+        if(outfits[style]) {
+            davidImg.src = outfits[style];
+            showSpeech("Новый образ! Как тебе? 😎");
+        }
+    }
+
+    // Обновление интерфейса (полоски, текст)
+    function updateUI() {
+        hunger = Math.min(100, Math.max(0, hunger));
+        happiness = Math.min(100, Math.max(0, happiness));
+        hungerFill.style.width = hunger + "%";
+        happyFill.style.width = happiness + "%";
+        hungerValueSpan.innerText = Math.floor(hunger);
+        happyValueSpan.innerText = Math.floor(happiness);
+        coinsSpan.innerText = coins;
+    }
+
+    // Показать речь с анимацией
+    function showSpeech(message) {
+        speechDiv.style.animation = 'none';
+        speechDiv.offsetHeight; // reflow
+        speechDiv.innerText = message;
+        speechDiv.style.animation = 'fadeInUp 0.3s';
+        // Автоисчезновение через 3 секунды? Нет, но можно оставить, но лучше пусть остается новое сообщение
+        setTimeout(() => {
+            if(speechDiv.innerText === message) {
+                // если за это время ничего не поменяли - оставим но можно без изменений
             }
-            throw new Error('Ошибка генерации');
+        }, 4000);
+    }
+
+    // Фразы в зависимости от параметров
+    function getContextPhrase() {
+        if(hunger < 30) {
+            return hungryPhrases[Math.floor(Math.random() * hungryPhrases.length)];
+        } else if(happiness < 35) {
+            return sadPhrases[Math.floor(Math.random() * sadPhrases.length)];
+        } else if(happiness > 75 && hunger > 70) {
+            return happyPhrases[Math.floor(Math.random() * happyPhrases.length)];
+        } else {
+            return normalPhrases[Math.floor(Math.random() * normalPhrases.length)];
         }
-        
-        // API 2: Pollinations (бесплатно)
-        async function generatePollinations(prompt) {
-            const encoded = encodeURIComponent(prompt);
-            const url = `https://image.pollinations.ai/prompt/${encoded}?width=1024&height=1024&nologo=true`;
-            return url; // Возвращаем прямую ссылку
+    }
+
+    // Действие "Покормить"
+    function feed() {
+        let increase = 20 + Math.floor(Math.random() * 10);
+        hunger = Math.min(100, hunger + increase);
+        happiness = Math.min(100, happiness + 5);
+        coins += 3;
+        updateUI();
+        showSpeech("Ням-ням! Спасибо! 🍔 +" + increase + " сытость");
+        animateAvatar();
+        checkLimits();
+    }
+
+    // Поиграть
+    function play() {
+        if(hunger <= 15) {
+            showSpeech("Я голодный, не могу играть... Сначала покорми! 🍕");
+            return;
         }
-        
-        // API 3: Prodia (если есть ключ)
-        async function generateProdia(prompt) {
-            // Публичный тестовый ключ
-            const response = await fetch('https://api.prodia.com/v1/sd/generate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Prodia-Key': '2b5a7c9e-8d4f-4a3b-9c1e-6f8d3a2b7c5e'
-                },
-                body: JSON.stringify({
-                    model: 'sdv1_4.ckpt',
-                    prompt: prompt,
-                    negative_prompt: 'nsfw',
-                    steps: 20,
-                    cfg_scale: 7,
-                    width: 512,
-                    height: 512
-                })
-            });
-            
-            const data = await response.json();
-            return `https://api.prodia.com/v1/job/${data.job}/image`;
+        let happyGain = 15 + Math.floor(Math.random() * 15);
+        happiness = Math.min(100, happiness + happyGain);
+        hunger = Math.max(0, hunger - 5);
+        coins += 2;
+        updateUI();
+        showSpeech("Ура! Играть весело! ⚽ +" + happyGain + " настроение");
+        animateAvatar();
+        checkLimits();
+    }
+
+    // Помыть
+    function clean() {
+        happiness = Math.min(100, happiness + 8);
+        showSpeech("Я чистый и свежий! 🚿✨");
+        animateAvatar();
+        updateUI();
+        checkLimits();
+    }
+
+    // Погладить
+    function pet() {
+        happiness = Math.min(100, happiness + 12);
+        coins += 1;
+        showSpeech("Мурлык... Спасибо! ❤️");
+        animateAvatar();
+        updateUI();
+        checkLimits();
+    }
+
+    // Мини-игра: кликер печеньки
+    function cookieGame() {
+        let gainHunger = 1;
+        let gainCoins = 2;
+        hunger = Math.min(100, hunger + gainHunger);
+        coins += gainCoins;
+        updateUI();
+        showSpeech("🍪 Вкусняшка! +1 сытость, +2 монетки");
+        animateAvatar();
+        if(hunger >= 95) {
+            showSpeech("Я наелся! Спасибо за печеньки 😋");
         }
-        
-        // Основная функция
-        async function startGeneration() {
-            const prompt = document.getElementById('prompt').value;
-            
-            document.getElementById('inputScreen').classList.add('hidden');
-            document.getElementById('loadingScreen').classList.remove('hidden');
-            
-            try {
-                // Пробуем Craiyon (самый надежный)
-                let imageUrl = await generateCraiyon(prompt);
-                
-                document.getElementById('resultImage').src = imageUrl;
-                document.getElementById('loadingScreen').classList.add('hidden');
-                document.getElementById('resultScreen').classList.remove('hidden');
-                
-            } catch (error) {
-                alert('Ошибка: ' + error.message);
-                document.getElementById('loadingScreen').classList.add('hidden');
-                document.getElementById('inputScreen').classList.remove('hidden');
+        checkLimits();
+    }
+
+    // анимация при нажатии
+    function animateAvatar() {
+        davidImg.classList.add('tap-effect');
+        setTimeout(() => {
+            davidImg.classList.remove('tap-effect');
+        }, 200);
+    }
+
+    // проверка граничных состояний (смерть или экстрим)
+    function checkLimits() {
+        if(hunger <= 0) {
+            hunger = 0;
+            showSpeech("Я умираю от голода... покорми меня скорее! 💀");
+            happiness = Math.max(0, happiness - 15);
+            updateUI();
+        }
+        if(happiness <= 0) {
+            happiness = 0;
+            showSpeech("Мне очень плохо... поиграй или погладь 😢");
+        }
+        if(hunger >= 90 && happiness >= 80) {
+            // дополнительная радость
+            if(Math.random() < 0.3) showSpeech("Я счастлив! Спасибо, что заботишься! 🌟");
+        }
+        updateUI();
+    }
+
+    // Клик по персонажу (говорит случайную фразу)
+    function onCharacterTap() {
+        let phrase = getContextPhrase();
+        showSpeech(phrase);
+        animateAvatar();
+        // маленький бонус за клик (ласка)
+        if(Math.random() < 0.4) {
+            happiness = Math.min(100, happiness + 2);
+            updateUI();
+        }
+    }
+
+    // Система ухудшения параметров со временем (каждые 30 сек)
+    let decayInterval;
+    function startDecay() {
+        decayInterval = setInterval(() => {
+            hunger = Math.max(0, hunger - 5);
+            happiness = Math.max(0, happiness - 3);
+            updateUI();
+            if(hunger <= 20 || happiness <= 20) {
+                showSpeech(getContextPhrase());
+            } else if (Math.random() < 0.2) {
+                // иногда просто случайная фраза
+                showSpeech(getContextPhrase());
             }
-        }
+            checkLimits();
+        }, 30000); // 30 секунд
+    }
+
+    // Загрузка и старт
+    function init() {
+        updateUI();
+        startDecay();
+        // Добавляем слушатели
+        document.getElementById('feedBtn').addEventListener('click', feed);
+        document.getElementById('playBtn').addEventListener('click', play);
+        document.getElementById('cleanBtn').addEventListener('click', clean);
+        document.getElementById('petBtn').addEventListener('click', pet);
+        document.getElementById('cookieGameBtn').addEventListener('click', cookieGame);
+        characterArea.addEventListener('click', onCharacterTap);
         
-        function downloadImage() {
-            const img = document.getElementById('resultImage');
-            const link = document.createElement('a');
-            link.href = img.src;
-            link.download = 'ai-image.jpg';
-            link.click();
-        }
-        
-        function newImage() {
-            document.getElementById('resultScreen').classList.add('hidden');
-            document.getElementById('inputScreen').classList.remove('hidden');
-        }
-    </script>
+        // Одежда
+        document.querySelectorAll('.outfit').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const style = el.getAttribute('data-outfit');
+                setOutfit(style);
+            });
+        });
+
+        // начальная фраза
+        setTimeout(() => {
+            showSpeech("Давид здесь! Заботься обо мне 💙");
+        }, 500);
+    }
+
+    init();
+</script>
 </body>
 </html>
