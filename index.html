@@ -38,7 +38,7 @@
         }
 
         .game-card {
-            max-width: 700px;
+            max-width: 750px;
             width: 100%;
             margin: 20px auto;
             background: linear-gradient(145deg, #fff9f0, #fff0e0);
@@ -51,28 +51,28 @@
 
         .stats-bar {
             background: linear-gradient(135deg, #ff9966, #ff5e62);
-            padding: 12px 15px;
+            padding: 10px 12px;
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 5px;
         }
 
         .stat {
             background: rgba(255,255,255,0.95);
-            border-radius: 30px;
-            padding: 4px 10px;
+            border-radius: 25px;
+            padding: 3px 8px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             font-weight: bold;
-            font-size: 0.7rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 0.65rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .bar-container {
-            width: 45px;
-            height: 5px;
+            width: 40px;
+            height: 4px;
             background: #e0e0e0;
             border-radius: 10px;
             overflow: hidden;
@@ -91,7 +91,7 @@
             position: relative;
             transition: background 0.3s;
             overflow: hidden;
-            min-height: 280px;
+            min-height: 300px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -136,12 +136,33 @@
             font-size: 40px;
             pointer-events: none;
             z-index: 3;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: accessoryFloat 2s ease-in-out infinite;
         }
 
-        .outfit-hat { top: -25px; left: 50%; transform: translateX(-50%); }
-        .outfit-glasses { top: 30px; left: 50%; transform: translateX(-50%); font-size: 35px; }
-        .outfit-scarf { top: 60px; left: 50%; transform: translateX(-50%); font-size: 35px; }
-        .outfit-cape { top: 40px; left: 50%; transform: translateX(-50%); font-size: 45px; }
+        @keyframes accessoryFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .outfit-hat { top: -28px; left: 50%; transform: translateX(-50%); }
+        .outfit-crown { top: -35px; left: 50%; transform: translateX(-50%); font-size: 48px; }
+        .outfit-glasses { top: 25px; left: 50%; transform: translateX(-50%); font-size: 38px; }
+        .outfit-scarf { top: 55px; left: 50%; transform: translateX(-50%); font-size: 38px; }
+        .outfit-cape { top: 35px; left: 50%; transform: translateX(-50%); font-size: 48px; }
+        .outfit-earrings { top: 35px; left: 30%; font-size: 30px; }
+        .outfit-earrings-right { top: 35px; right: 30%; font-size: 30px; }
+        .outfit-bow { top: 20px; left: 70%; font-size: 32px; }
+        .outfit-flower { top: 15px; left: 25%; font-size: 32px; }
+        .outfit-mask { top: 45px; left: 50%; transform: translateX(-50%); font-size: 35px; }
+        .outfit-necklace { top: 70px; left: 50%; transform: translateX(-50%); font-size: 32px; }
+        .outfit-bracelet { top: 85px; left: 20%; font-size: 28px; }
+        .outfit-bracelet-right { top: 85px; right: 20%; font-size: 28px; }
+        .outfit-wings { top: 20px; left: 50%; transform: translateX(-50%); font-size: 55px; }
+        .outfit-halo { top: -25px; left: 50%; transform: translateX(-50%); font-size: 45px; }
+        .outfit-devil { top: -20px; left: 50%; transform: translateX(-50%); font-size: 40px; }
+        .outfit-pirate { top: -15px; left: 50%; transform: translateX(-50%); font-size: 42px; }
+        .outfit-ninja { top: 20px; left: 50%; transform: translateX(-50%); font-size: 38px; }
 
         .breathing {
             animation: breathe 3s ease-in-out infinite;
@@ -157,7 +178,7 @@
             border-radius: 25px;
             padding: 10px 18px;
             display: inline-block;
-            margin-top: 12px;
+            margin-top: 15px;
             font-size: 0.9rem;
             font-weight: 600;
             color: #5a3e2b;
@@ -168,26 +189,26 @@
         }
 
         .action-panel {
-            padding: 12px;
+            padding: 10px;
             background: #fff5e8;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+            gap: 6px;
             border-bottom: 1px solid #ffe0b5;
         }
 
         .action-btn {
             background: linear-gradient(135deg, #ffb347, #ff8c33);
             border: none;
-            padding: 8px 4px;
-            border-radius: 40px;
+            padding: 6px 3px;
+            border-radius: 35px;
             font-weight: bold;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
+            gap: 2px;
             cursor: pointer;
             transition: all 0.1s;
             font-family: inherit;
@@ -200,13 +221,13 @@
         }
 
         .action-btn span:first-child {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
         .tabs {
             display: flex;
             background: #ffefdf;
-            padding: 0 12px;
+            padding: 0 8px;
             gap: 2px;
             flex-wrap: wrap;
         }
@@ -214,14 +235,14 @@
         .tab {
             flex: 1;
             text-align: center;
-            padding: 8px 4px;
+            padding: 6px 3px;
             background: transparent;
             border: none;
             font-weight: bold;
             color: #a56b2f;
             cursor: pointer;
-            font-size: 0.7rem;
-            border-radius: 15px 15px 0 0;
+            font-size: 0.65rem;
+            border-radius: 12px 12px 0 0;
             transition: all 0.2s;
         }
 
@@ -232,7 +253,7 @@
 
         .tab-content {
             display: none;
-            padding: 15px;
+            padding: 12px;
             background: #fff5ea;
             min-height: 280px;
         }
@@ -249,14 +270,14 @@
 
         .game-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
         }
 
         .feature-card {
             background: white;
-            border-radius: 18px;
-            padding: 10px;
+            border-radius: 15px;
+            padding: 8px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
@@ -270,26 +291,31 @@
         }
 
         .feature-card.active-outfit {
-            border: 3px solid #ff8c33;
-            background: #fff0e0;
+            border: 3px solid #4caf50;
+            background: #e8f5e9;
             transform: scale(1.02);
         }
 
+        .feature-card.owned-outfit {
+            border: 2px solid #ffd700;
+            background: #fff9c4;
+        }
+
         .feature-icon {
-            font-size: 1.6rem;
-            margin-bottom: 4px;
+            font-size: 1.5rem;
+            margin-bottom: 3px;
         }
 
         .feature-title {
             font-weight: bold;
             color: #8b5a2b;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
 
         .feature-cost {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: #ff8c33;
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
         .bonus-btn, .save-btn, .skill-btn {
@@ -298,10 +324,10 @@
             padding: 8px;
             text-align: center;
             font-weight: bold;
-            margin-top: 12px;
+            margin-top: 10px;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .bonus-btn:active, .save-btn:active, .skill-btn:active {
@@ -311,27 +337,27 @@
         .achievement-badge, .skill-badge {
             background: linear-gradient(135deg, #ffd700, #ffb347);
             border-radius: 15px;
-            padding: 6px;
-            margin: 4px 0;
-            font-size: 0.65rem;
+            padding: 5px;
+            margin: 3px 0;
+            font-size: 0.6rem;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .pet-stats {
             background: #ffe0b5;
-            border-radius: 20px;
-            padding: 10px;
-            margin-top: 10px;
+            border-radius: 18px;
+            padding: 8px;
+            margin-top: 8px;
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
 
         footer {
             text-align: center;
-            padding: 8px;
-            font-size: 0.55rem;
+            padding: 6px;
+            font-size: 0.5rem;
             background: #f7e5d2;
             color: #7a5a3a;
         }
@@ -358,13 +384,13 @@
             50% { transform: scale(0.95); }
         }
 
-        @media (max-width: 500px) {
-            .game-grid { grid-template-columns: repeat(2, 1fr); }
-            .stats-bar .stat { font-size: 0.65rem; padding: 3px 8px; }
-            .action-btn { font-size: 0.6rem; }
-            .action-btn span:first-child { font-size: 1rem; }
-            #davidEmoji { font-size: 90px; }
-            .outfit-accessory { font-size: 30px; }
+        @media (max-width: 550px) {
+            .game-grid { grid-template-columns: repeat(3, 1fr); }
+            .stats-bar .stat { font-size: 0.55rem; padding: 2px 6px; }
+            .action-btn { font-size: 0.55rem; }
+            .action-btn span:first-child { font-size: 0.9rem; }
+            #davidEmoji { font-size: 80px; }
+            .outfit-accessory { font-size: 28px; }
         }
     </style>
 </head>
@@ -376,7 +402,7 @@
         <div class="stat"><span>😊</span> <span id="happyVal">100</span>%<div class="bar-container"><div class="bar-fill" id="happyBar" style="background:#ff9800; width:100%"></div></div></div>
         <div class="stat"><span>💤</span> <span id="energyVal">100</span>%<div class="bar-container"><div class="bar-fill" id="energyBar" style="background:#9c27b0; width:100%"></div></div></div>
         <div class="stat"><span>🧼</span> <span id="cleanVal">100</span>%<div class="bar-container"><div class="bar-fill" id="cleanBar" style="background:#00bcd4; width:100%"></div></div></div>
-        <div class="stat"><span>⭐</span> <span id="coinsVal">200</span></div>
+        <div class="stat"><span>⭐</span> <span id="coinsVal">500</span></div>
         <div class="stat"><span>💎</span> <span id="crystalsVal">0</span></div>
         <div class="stat"><span>🎮</span> Ур.<span id="levelVal">1</span></div>
     </div>
@@ -385,23 +411,36 @@
     <div class="character-area" id="characterArea">
         <div class="character-container">
             <div id="davidEmoji" class="breathing">👨‍🦰</div>
+            <!-- Все аксессуары -->
             <div id="outfitHat" class="outfit-accessory outfit-hat" style="display:none;">🧢</div>
+            <div id="outfitTopHat" class="outfit-accessory outfit-hat" style="display:none;">🎩</div>
+            <div id="outfitCrown" class="outfit-accessory outfit-crown" style="display:none;">👑</div>
             <div id="outfitGlasses" class="outfit-accessory outfit-glasses" style="display:none;">🕶️</div>
             <div id="outfitScarf" class="outfit-accessory outfit-scarf" style="display:none;">🧣</div>
             <div id="outfitCape" class="outfit-accessory outfit-cape" style="display:none;">🦸</div>
-            <div id="outfitTopHat" class="outfit-accessory outfit-hat" style="display:none;">🎩</div>
+            <div id="outfitEarrings" class="outfit-accessory outfit-earrings" style="display:none;">💎</div>
+            <div id="outfitBow" class="outfit-accessory outfit-bow" style="display:none;">🎀</div>
+            <div id="outfitFlower" class="outfit-accessory outfit-flower" style="display:none;">🌸</div>
+            <div id="outfitMask" class="outfit-accessory outfit-mask" style="display:none;">🎭</div>
+            <div id="outfitNecklace" class="outfit-accessory outfit-necklace" style="display:none;">📿</div>
+            <div id="outfitWings" class="outfit-accessory outfit-wings" style="display:none;">🪽</div>
+            <div id="outfitHalo" class="outfit-accessory outfit-halo" style="display:none;">😇</div>
+            <div id="outfitDevil" class="outfit-accessory outfit-devil" style="display:none;">😈</div>
+            <div id="outfitPirate" class="outfit-accessory outfit-pirate" style="display:none;">🏴‍☠️</div>
+            <div id="outfitNinja" class="outfit-accessory outfit-ninja" style="display:none;">🥷</div>
+            <div id="outfitBracelet" class="outfit-accessory outfit-bracelet" style="display:none;">💫</div>
         </div>
         <div id="speechText" class="speech-bubble">✨ Привет! Я Давид 5.0! ✨</div>
     </div>
 
     <!-- Кнопки действий -->
     <div class="action-panel">
-        <button class="action-btn" id="feedBtn"><span>🍕</span> Покормить</button>
-        <button class="action-btn" id="playBtn"><span>⚽</span> Поиграть</button>
+        <button class="action-btn" id="feedBtn"><span>🍕</span> Кормить</button>
+        <button class="action-btn" id="playBtn"><span>⚽</span> Играть</button>
         <button class="action-btn" id="sleepBtn"><span>😴</span> Спать</button>
-        <button class="action-btn" id="cleanBtn"><span>🧼</span> Помыть</button>
-        <button class="action-btn" id="petBtn"><span>✋</span> Погладить</button>
-        <button class="action-btn" id="danceBtn"><span>💃</span> Танцевать</button>
+        <button class="action-btn" id="cleanBtn"><span>🧼</span> Мыть</button>
+        <button class="action-btn" id="petBtn"><span>✋</span> Гладить</button>
+        <button class="action-btn" id="danceBtn"><span>💃</span> Танцы</button>
         <button class="action-btn" id="readBtn"><span>📚</span> Читать</button>
         <button class="action-btn" id="cookBtn"><span>🍳</span> Готовить</button>
     </div>
@@ -410,9 +449,9 @@
     <div class="tabs">
         <button class="tab active" data-tab="games">🎮 Игры</button>
         <button class="tab" data-tab="shop">🛍️ Магазин</button>
+        <button class="tab" data-tab="outfits">👕 Украшения</button>
         <button class="tab" data-tab="pets">🐾 Питомец</button>
         <button class="tab" data-tab="room">🏠 Комната</button>
-        <button class="tab" data-tab="outfits">👕 Одежда</button>
         <button class="tab" data-tab="skills">💪 Навыки</button>
         <button class="tab" data-tab="quests">📋 Квесты</button>
         <button class="tab" data-tab="achievements">🏆 Достиж</button>
@@ -428,7 +467,6 @@
             <div class="feature-card" data-game="darts"><div class="feature-icon">🎯</div><div class="feature-title">Дартс</div><div class="feature-cost">+15-30⭐</div></div>
             <div class="feature-card" data-game="music"><div class="feature-icon">🎵</div><div class="feature-title">Музыка</div><div class="feature-cost">+15😊</div></div>
             <div class="feature-card" data-game="slot"><div class="feature-icon">🎰</div><div class="feature-title">Слоты</div><div class="feature-cost">10-500⭐</div></div>
-            <div class="feature-card" data-game="cooking"><div class="feature-icon">🍳</div><div class="feature-title">Кулинария</div><div class="feature-cost">+40🍔</div></div>
             <div class="feature-card" data-game="racing"><div class="feature-icon">🏎️</div><div class="feature-title">Гонки</div><div class="feature-cost">20-100⭐</div></div>
         </div>
         <div class="bonus-btn" id="dailyBonus">🎁 Ежедневный бонус: ЗАБРАТЬ</div>
@@ -444,10 +482,14 @@
             <div class="feature-card" data-shop="cake"><div class="feature-icon">🎂</div><div class="feature-title">Торт</div><div class="feature-cost">50⭐ +60🍔</div></div>
             <div class="feature-card" data-shop="soap"><div class="feature-icon">🧼</div><div class="feature-title">Мыло</div><div class="feature-cost">10⭐ +25🧼</div></div>
             <div class="feature-card" data-shop="vitamins"><div class="feature-icon">💊</div><div class="feature-title">Витамины</div><div class="feature-cost">40⭐ +20 всем</div></div>
-            <div class="feature-card" data-shop="crystal"><div class="feature-icon">💎</div><div class="feature-title">10 Кристаллов</div><div class="feature-cost">500⭐</div></div>
-            <div class="feature-card" data-shop="bed"><div class="feature-icon">🛏️</div><div class="feature-title">Кровать</div><div class="feature-cost">300⭐ +20% сон</div></div>
-            <div class="feature-card" data-shop="tv"><div class="feature-icon">📺</div><div class="feature-title">Телевизор</div><div class="feature-cost">250⭐ +10😊</div></div>
         </div>
+    </div>
+
+    <!-- Украшения (одежда) -->
+    <div class="tab-content" id="outfits-tab">
+        <div class="game-grid" id="outfitsGrid"></div>
+        <div id="currentOutfit" class="pet-stats" style="margin-top:10px;">✨ Надето: Классика</div>
+        <div class="save-btn" id="resetOutfitBtn" style="margin-top:8px; background:#ff8c33;">🔄 Снять все украшения</div>
     </div>
 
     <!-- Питомец -->
@@ -461,7 +503,6 @@
             <div class="feature-card" data-pet="panda"><div class="feature-icon">🐼</div><div class="feature-title">Панда</div><div class="feature-cost">500⭐</div></div>
         </div>
         <div id="petDisplay" class="pet-stats">🐾 Нет питомца. Купи друга!</div>
-        <div id="petBonusDisplay" class="pet-stats" style="margin-top:5px;"></div>
     </div>
 
     <!-- Комната -->
@@ -473,16 +514,7 @@
             <div class="feature-card" data-room="space"><div class="feature-icon">🚀</div><div class="feature-title">Космос</div><div class="feature-cost">120⭐</div></div>
             <div class="feature-card" data-room="winter"><div class="feature-icon">❄️</div><div class="feature-title">Зима</div><div class="feature-cost">100⭐</div></div>
             <div class="feature-card" data-room="castle"><div class="feature-icon">🏰</div><div class="feature-title">Замок</div><div class="feature-cost">150⭐</div></div>
-            <div class="feature-card" data-room="autumn"><div class="feature-icon">🍂</div><div class="feature-title">Осень</div><div class="feature-cost">80⭐</div></div>
-            <div class="feature-card" data-room="spring"><div class="feature-icon">🌸</div><div class="feature-title">Весна</div><div class="feature-cost">80⭐</div></div>
         </div>
-    </div>
-
-    <!-- Одежда -->
-    <div class="tab-content" id="outfits-tab">
-        <div class="game-grid" id="outfitsGrid"></div>
-        <div id="currentOutfit" class="pet-stats" style="margin-top:10px;">👕 Текущий наряд: Классика</div>
-        <div class="save-btn" id="resetOutfitBtn" style="margin-top:10px; background:#ff8c33;">🔄 Снять всю одежду</div>
     </div>
 
     <!-- Навыки -->
@@ -502,33 +534,52 @@
         <div id="achievementsList"></div>
     </div>
     
-    <footer>✨ Нажми на Давида! Автосохранение каждые 30 сек | Версия 5.0 ✨</footer>
+    <footer>✨ Нажми на Давида! Все купленные украшения сохраняются навсегда ✨</footer>
 </div>
 
 <script>
     // ==================== ИГРОВЫЕ ПЕРЕМЕННЫЕ ====================
     let hunger = 100, happiness = 100, energy = 100, cleanliness = 100;
-    let coins = 200, crystals = 0, level = 1, exp = 0;
+    let coins = 500, crystals = 0, level = 1, exp = 0;
     let hasPet = null, currentRoom = 'default';
     let lastDaily = Date.now();
     
-    // Одежда - теперь массив активных предметов (можно носить несколько!)
-    let activeOutfits = {
-        hat: false,
-        glasses: false,
-        scarf: false,
-        cape: false,
-        topHat: false
+    // ВЛАДЕНИЕ УКРАШЕНИЯМИ (сохраняется навсегда!)
+    let ownedOutfits = {
+        hat: false, topHat: false, crown: false, glasses: false, scarf: false,
+        cape: false, earrings: false, bow: false, flower: false, mask: false,
+        necklace: false, wings: false, halo: false, devil: false, pirate: false,
+        ninja: false, bracelet: false
     };
     
-    // Данные об одежде
+    // НАДЕТЫЕ УКРАШЕНИЯ (что сейчас на персонаже)
+    let activeOutfits = {
+        hat: false, topHat: false, crown: false, glasses: false, scarf: false,
+        cape: false, earrings: false, bow: false, flower: false, mask: false,
+        necklace: false, wings: false, halo: false, devil: false, pirate: false,
+        ninja: false, bracelet: false
+    };
+    
+    // Данные об украшениях
     let outfitsData = {
-        classic: { name: "👕 Классика", price: 0, type: "base", icon: "👕", emoji: null },
-        hat: { name: "🧢 Бейсболка", price: 60, type: "hat", icon: "🧢", emoji: "🧢", position: "hat" },
-        topHat: { name: "🎩 Цилиндр", price: 100, type: "hat", icon: "🎩", emoji: "🎩", position: "hat" },
-        glasses: { name: "🕶️ Очки", price: 80, type: "face", icon: "🕶️", emoji: "🕶️", position: "glasses" },
-        scarf: { name: "🧣 Шарф", price: 70, type: "neck", icon: "🧣", emoji: "🧣", position: "scarf" },
-        cape: { name: "🦸 Плащ", price: 120, type: "back", icon: "🦸", emoji: "🦸", position: "cape" }
+        classic: { name: "👕 Классика", price: 0, type: "base", icon: "👕", emoji: null, position: null, category: "base" },
+        hat: { name: "🧢 Бейсболка", price: 50, type: "hat", icon: "🧢", emoji: "🧢", position: "hat", elementId: "outfitHat", category: "Головные уборы" },
+        topHat: { name: "🎩 Цилиндр", price: 80, type: "hat", icon: "🎩", emoji: "🎩", position: "topHat", elementId: "outfitTopHat", category: "Головные уборы" },
+        crown: { name: "👑 Корона", price: 200, type: "hat", icon: "👑", emoji: "👑", position: "crown", elementId: "outfitCrown", category: "Головные уборы" },
+        glasses: { name: "🕶️ Очки", price: 60, type: "face", icon: "🕶️", emoji: "🕶️", position: "glasses", elementId: "outfitGlasses", category: "Лицо" },
+        mask: { name: "🎭 Маска", price: 70, type: "face", icon: "🎭", emoji: "🎭", position: "mask", elementId: "outfitMask", category: "Лицо" },
+        scarf: { name: "🧣 Шарф", price: 55, type: "neck", icon: "🧣", emoji: "🧣", position: "scarf", elementId: "outfitScarf", category: "Шея" },
+        necklace: { name: "📿 Ожерелье", price: 90, type: "neck", icon: "📿", emoji: "📿", position: "necklace", elementId: "outfitNecklace", category: "Шея" },
+        cape: { name: "🦸 Плащ", price: 100, type: "back", icon: "🦸", emoji: "🦸", position: "cape", elementId: "outfitCape", category: "Спина" },
+        wings: { name: "🪽 Крылья", price: 250, type: "back", icon: "🪽", emoji: "🪽", position: "wings", elementId: "outfitWings", category: "Спина" },
+        earrings: { name: "💎 Серьги", price: 75, type: "ears", icon: "💎", emoji: "💎", position: "earrings", elementId: "outfitEarrings", category: "Уши" },
+        bow: { name: "🎀 Бантик", price: 45, type: "hair", icon: "🎀", emoji: "🎀", position: "bow", elementId: "outfitBow", category: "Волосы" },
+        flower: { name: "🌸 Цветок", price: 40, type: "hair", icon: "🌸", emoji: "🌸", position: "flower", elementId: "outfitFlower", category: "Волосы" },
+        halo: { name: "😇 Нимб", price: 180, type: "head", icon: "😇", emoji: "😇", position: "halo", elementId: "outfitHalo", category: "Голова" },
+        devil: { name: "😈 Рожки", price: 150, type: "head", icon: "😈", emoji: "😈", position: "devil", elementId: "outfitDevil", category: "Голова" },
+        pirate: { name: "🏴‍☠️ Повязка", price: 65, type: "head", icon: "🏴‍☠️", emoji: "🏴‍☠️", position: "pirate", elementId: "outfitPirate", category: "Голова" },
+        ninja: { name: "🥷 Повязка", price: 85, type: "head", icon: "🥷", emoji: "🥷", position: "ninja", elementId: "outfitNinja", category: "Голова" },
+        bracelet: { name: "💫 Браслет", price: 60, type: "hand", icon: "💫", emoji: "💫", position: "bracelet", elementId: "outfitBracelet", category: "Руки" }
     };
     
     // Навыки
@@ -560,7 +611,6 @@
     
     let lastQuestReset = Date.now();
     
-    // Питомцы бонусы
     let petBonuses = {
         cat: { name: "🐱 Котенок", bonus: " +5 настроения/день" },
         dog: { name: "🐶 Щенок", bonus: " защита от грусти" },
@@ -570,45 +620,35 @@
         panda: { name: "🐼 Панда", bonus: " медленнее падение параметров" }
     };
     
-    // Функция обновления внешнего вида персонажа (одежда на нём!)
+    // Функция обновления внешнего вида
     function updateCharacterAppearance() {
-        document.getElementById('outfitHat').style.display = 'none';
-        document.getElementById('outfitGlasses').style.display = 'none';
-        document.getElementById('outfitScarf').style.display = 'none';
-        document.getElementById('outfitCape').style.display = 'none';
-        document.getElementById('outfitTopHat').style.display = 'none';
-        
-        if (activeOutfits.hat) {
-            document.getElementById('outfitHat').style.display = 'block';
-            document.getElementById('outfitHat').innerHTML = '🧢';
-        }
-        if (activeOutfits.topHat) {
-            document.getElementById('outfitTopHat').style.display = 'block';
-            document.getElementById('outfitTopHat').innerHTML = '🎩';
-        }
-        if (activeOutfits.glasses) {
-            document.getElementById('outfitGlasses').style.display = 'block';
-            document.getElementById('outfitGlasses').innerHTML = '🕶️';
-        }
-        if (activeOutfits.scarf) {
-            document.getElementById('outfitScarf').style.display = 'block';
-            document.getElementById('outfitScarf').innerHTML = '🧣';
-        }
-        if (activeOutfits.cape) {
-            document.getElementById('outfitCape').style.display = 'block';
-            document.getElementById('outfitCape').innerHTML = '🦸';
+        // Скрываем все
+        for (let key in outfitsData) {
+            if (outfitsData[key].elementId) {
+                document.getElementById(outfitsData[key].elementId).style.display = 'none';
+            }
         }
         
-        // Обновляем текст текущего наряда
+        // Показываем только надетые
+        for (let key in activeOutfits) {
+            if (activeOutfits[key] && outfitsData[key] && outfitsData[key].elementId) {
+                let elem = document.getElementById(outfitsData[key].elementId);
+                if (elem) {
+                    elem.style.display = 'block';
+                    elem.innerHTML = outfitsData[key].emoji;
+                }
+            }
+        }
+        
+        // Обновляем текст надетых украшений
         let outfitText = [];
-        if (activeOutfits.hat) outfitText.push('🧢');
-        if (activeOutfits.topHat) outfitText.push('🎩');
-        if (activeOutfits.glasses) outfitText.push('🕶️');
-        if (activeOutfits.scarf) outfitText.push('🧣');
-        if (activeOutfits.cape) outfitText.push('🦸');
+        for (let key in activeOutfits) {
+            if (activeOutfits[key] && outfitsData[key]) {
+                outfitText.push(outfitsData[key].icon);
+            }
+        }
         if (outfitText.length === 0) outfitText.push('👕 Классика');
-        
-        document.getElementById('currentOutfit').innerHTML = `👕 Текущий наряд: ${outfitText.join(' + ')}`;
+        document.getElementById('currentOutfit').innerHTML = `✨ Надето: ${outfitText.join(' + ')}`;
     }
     
     function createParticles(x, y, emojis) {
@@ -679,6 +719,7 @@
         updateAchievementsUI();
         checkLevelUp();
         applyPetBonus();
+        setupOutfitsGrid(); // Обновляем сетку украшений для показа владения
     }
     
     function updateEmoji() {
@@ -709,8 +750,6 @@
             space: "linear-gradient(145deg, #0a0a2a, #1a1a4a)",
             winter: "linear-gradient(145deg, #b0e0e6, #add8e6)",
             castle: "linear-gradient(145deg, #b87333, #8b4513)",
-            autumn: "linear-gradient(145deg, #ffb347, #cc7b2e)",
-            spring: "linear-gradient(145deg, #98fb98, #90ee90)",
             default: "linear-gradient(145deg, #a8edea, #fed6e3)"
         };
         charArea.style.background = rooms[currentRoom] || rooms.default;
@@ -854,7 +893,6 @@
             darts: () => { if(energy>=5) { let e=15+Math.random()*25; coins+=e; achievements.totalCoins+=e; weeklyQuests.coins.current+=e; achievements.gamesPlayed++; energy-=4; addExp(10); showSpeech(`🎯 +${Math.floor(e)}⭐!`); updateUI(); } else showSpeech("Нужна энергия!"); },
             music: () => { happiness=Math.min(100,happiness+15); addExp(8); showSpeech("🎵 +15😊!"); updateUI(); },
             slot: () => { if(coins>=10) { coins-=10; let win=Math.random(); if(win<0.05) { let jackpot=200+Math.random()*300; coins+=jackpot; showSpeech(`🎰 ДЖЕКПОТ! +${Math.floor(jackpot)}⭐!!!`); } else if(win<0.3) { let prize=20+Math.random()*80; coins+=prize; showSpeech(`🎰 Выигрыш! +${Math.floor(prize)}⭐`); } else showSpeech("🎰 Попробуй еще раз!"); updateUI(); } else showSpeech("Нужно 10⭐!"); },
-            cooking: () => { if(energy>=10) { hunger=Math.min(100,hunger+40); addExp(12); showSpeech("🍳 +40🍔!"); updateUI(); } else showSpeech("Нужна энергия!"); },
             racing: () => { if(energy>=12) { let e=20+Math.random()*80; coins+=e; achievements.totalCoins+=e; weeklyQuests.coins.current+=e; energy-=10; addExp(12); showSpeech(`🏎️ Гонка! +${Math.floor(e)}⭐!`); updateUI(); } else showSpeech("Нужна энергия!"); }
         };
         if(games[game]) games[game]();
@@ -868,10 +906,7 @@
             energy: { cost:15, effect:()=>energy=Math.min(100,energy+30) },
             cake: { cost:50, effect:()=>{ hunger=Math.min(100,hunger+60); happiness=Math.min(100,happiness+20); } },
             soap: { cost:10, effect:()=>cleanliness=Math.min(100,cleanliness+25) },
-            vitamins: { cost:40, effect:()=>{ hunger=Math.min(100,hunger+15); happiness=Math.min(100,happiness+15); energy=Math.min(100,energy+15); cleanliness=Math.min(100,cleanliness+15); } },
-            crystal: { cost:500, effect:()=>{ coins-=500; crystals+=10; showSpeech("💎 +10 кристаллов!"); } },
-            bed: { cost:300, effect:()=>{ showSpeech("🛏️ Кровать куплена! Сон эффективнее!"); } },
-            tv: { cost:250, effect:()=>{ showSpeech("📺 Телевизор куплен! +5 к играм!"); } }
+            vitamins: { cost:40, effect:()=>{ hunger=Math.min(100,hunger+15); happiness=Math.min(100,happiness+15); energy=Math.min(100,energy+15); cleanliness=Math.min(100,cleanliness+15); } }
         };
         if(items[item] && coins >= items[item].cost) {
             coins -= items[item].cost;
@@ -894,7 +929,7 @@
     }
     
     function changeRoom(roomType) {
-        let roomNames = { forest:"🌳 Лес", beach:"🌊 Пляж", night:"🌙 Ночь", space:"🚀 Космос", winter:"❄️ Зима", castle:"🏰 Замок", autumn:"🍂 Осень", spring:"🌸 Весна" };
+        let roomNames = { forest:"🌳 Лес", beach:"🌊 Пляж", night:"🌙 Ночь", space:"🚀 Космос", winter:"❄️ Зима", castle:"🏰 Замок" };
         if(coins >= 80 && currentRoom !== roomType) {
             coins -= 80;
             currentRoom = roomType;
@@ -903,46 +938,58 @@
         } else showSpeech("Не хватает⭐!");
     }
     
-    // Одежда - покупаем и надеваем на персонажа!
+    // ПОКУПКА УКРАШЕНИЯ (сохраняется навсегда!)
     function buyOutfit(outfitKey) {
         let outfit = outfitsData[outfitKey];
         if (!outfit) return;
         
-        // Для классики - снимаем всю одежду
+        // Классика - снимаем всё
         if (outfitKey === 'classic') {
-            activeOutfits = { hat: false, glasses: false, scarf: false, cape: false, topHat: false };
-            showSpeech("Надел классический наряд! 👕");
+            for (let key in activeOutfits) {
+                activeOutfits[key] = false;
+            }
+            showSpeech("Снял все украшения! 👕");
             updateCharacterAppearance();
-            updateUI();
             saveGame();
             return;
         }
         
-        // Проверяем, есть ли уже такой предмет
-        let outfitField = outfit.position;
-        if (activeOutfits[outfitField]) {
-            showSpeech(`Ты уже носишь ${outfit.name}!`, true);
+        // Если уже есть в инвентаре (куплено раньше)
+        if (ownedOutfits[outfitKey]) {
+            // Переключаем надевание/снимание
+            activeOutfits[outfitKey] = !activeOutfits[outfitKey];
+            if (activeOutfits[outfitKey]) {
+                showSpeech(`Надел ${outfit.name}! ✨`);
+                createParticles(null, null, ['✨', '🌟', '💫']);
+            } else {
+                showSpeech(`Снял ${outfit.name}`);
+            }
+            updateCharacterAppearance();
+            saveGame();
             return;
         }
         
+        // Покупка нового украшения
         if (coins >= outfit.price) {
             coins -= outfit.price;
-            activeOutfits[outfitField] = true;
-            showSpeech(`Надел ${outfit.name}! ✨`);
-            createParticles(null, null, ['✨', '🌟', '💫']);
+            ownedOutfits[outfitKey] = true; // Сохраняем в инвентарь
+            activeOutfits[outfitKey] = true; // Автоматически надеваем
+            showSpeech(`🎉 Купил ${outfit.name}! Теперь он у тебя навсегда! ✨`);
+            createParticles(null, null, ['🎉', '✨', '🌟', '💎']);
             updateCharacterAppearance();
             updateUI();
             saveGame();
         } else {
-            showSpeech(`Не хватает ${outfit.price}⭐!`, true);
+            showSpeech(`Не хватает ${outfit.price}⭐! Поиграй в игры!`, true);
         }
     }
     
     function resetAllOutfits() {
-        activeOutfits = { hat: false, glasses: false, scarf: false, cape: false, topHat: false };
-        showSpeech("Снял всю одежду! 👕");
+        for (let key in activeOutfits) {
+            activeOutfits[key] = false;
+        }
+        showSpeech("Снял все украшения! 👕");
         updateCharacterAppearance();
-        updateUI();
         saveGame();
     }
     
@@ -1034,7 +1081,9 @@
         if(coins >= 500) list.push('🏆 "Миллионер" - 500⭐');
         if(hasPet) list.push('🏆 "Друг животных" - есть питомец');
         if(achievements.cooks >= 10) list.push('🏆 "Шеф-повар" - 10 блюд');
-        if(Object.values(skills).every(s => s.level >= 5)) list.push('🏆 "Мастер на все руки"');
+        let ownedCount = Object.values(ownedOutfits).filter(v => v === true).length;
+        if(ownedCount >= 5) list.push(`🏆 "Модник" - ${ownedCount} украшений`);
+        if(ownedCount >= 10) list.push(`🏆 "Коллекционер" - ${ownedCount} украшений`);
         if(list.length === 0) list.push('🎯 Выполняй действия для получения достижений!');
         document.getElementById('achievementsList').innerHTML = list.map(a => `<div class="achievement-badge">${a}</div>`).join('');
     }
@@ -1060,10 +1109,10 @@
             hunger, happiness, energy, cleanliness, coins, crystals, level, exp, 
             hasPet, currentRoom, lastDaily, lastQuestReset, 
             achievements, skills, dailyQuests, weeklyQuests,
-            activeOutfits
+            ownedOutfits, activeOutfits
         };
         localStorage.setItem('davidSave5', JSON.stringify(saveData));
-        showNotification('💾 Сохранено!');
+        showNotification('💾 Сохранено! Все украшения сохранены!');
     }
     
     function loadGame() {
@@ -1071,19 +1120,20 @@
         if(save) {
             let data = JSON.parse(save);
             hunger = data.hunger || 100; happiness = data.happiness || 100; energy = data.energy || 100; cleanliness = data.cleanliness || 100;
-            coins = data.coins || 200; crystals = data.crystals || 0; level = data.level || 1; exp = data.exp || 0;
+            coins = data.coins || 500; crystals = data.crystals || 0; level = data.level || 1; exp = data.exp || 0;
             hasPet = data.hasPet || null; currentRoom = data.currentRoom || 'default';
             lastDaily = data.lastDaily || Date.now(); lastQuestReset = data.lastQuestReset || Date.now();
             if(data.achievements) achievements = data.achievements;
             if(data.skills) skills = data.skills;
             if(data.dailyQuests) dailyQuests = data.dailyQuests;
             if(data.weeklyQuests) weeklyQuests = data.weeklyQuests;
+            if(data.ownedOutfits) ownedOutfits = data.ownedOutfits;
             if(data.activeOutfits) activeOutfits = data.activeOutfits;
             
             if(hasPet) document.getElementById('petDisplay').innerHTML = `🐾 Твой питомец: ${petBonuses[hasPet].name} ${petBonuses[hasPet].bonus}`;
             updateCharacterAppearance();
             updateUI();
-            showNotification('💾 Загружено!');
+            showNotification('💾 Игра загружена! Все украшения сохранены!');
         }
     }
     
@@ -1097,21 +1147,56 @@
     }
     
     function setupOutfitsGrid() {
+        // Группируем по категориям
+        let categories = {
+            "Головные уборы": ["hat", "topHat", "crown"],
+            "Лицо": ["glasses", "mask"],
+            "Шея": ["scarf", "necklace"],
+            "Спина": ["cape", "wings"],
+            "Волосы": ["bow", "flower"],
+            "Голова": ["halo", "devil", "pirate", "ninja"],
+            "Уши/Руки": ["earrings", "bracelet"]
+        };
+        
         let html = '';
-        for(let o in outfitsData) {
-            let outfit = outfitsData[o];
-            let isActive = false;
-            if (o === 'classic') {
-                isActive = !Object.values(activeOutfits).some(v => v === true);
-            } else {
-                isActive = activeOutfits[outfit.position];
+        
+        // Классика отдельно
+        let isClassicActive = !Object.values(activeOutfits).some(v => v === true);
+        html += `<div class="feature-card ${isClassicActive ? 'active-outfit' : ''}" onclick="buyOutfit('classic')">
+            <div class="feature-icon">👕</div>
+            <div class="feature-title">Классика</div>
+            <div class="feature-cost">Снять всё</div>
+        </div>`;
+        
+        for (let category in categories) {
+            html += `<div style="grid-column: span 4; font-size:0.7rem; font-weight:bold; color:#ff8c33; margin-top:5px;">${category}</div>`;
+            for (let key of categories[category]) {
+                let outfit = outfitsData[key];
+                if (outfit) {
+                    let isOwned = ownedOutfits[key];
+                    let isActive = activeOutfits[key];
+                    let statusClass = '';
+                    let statusText = '';
+                    
+                    if (isOwned) {
+                        statusClass = 'owned-outfit';
+                        if (isActive) {
+                            statusClass = 'active-outfit';
+                            statusText = ' (надето)';
+                        } else {
+                            statusText = ' (в инвентаре)';
+                        }
+                    } else {
+                        statusText = ` ${outfit.price}⭐`;
+                    }
+                    
+                    html += `<div class="feature-card ${statusClass}" onclick="buyOutfit('${key}')">
+                        <div class="feature-icon">${outfit.icon}</div>
+                        <div class="feature-title">${outfit.name}${statusText}</div>
+                        <div class="feature-cost">${isOwned ? (isActive ? '✓ Надето' : 'В инвентаре') : outfit.price + '⭐'}</div>
+                    </div>`;
+                }
             }
-            let activeClass = isActive ? 'active-outfit' : '';
-            html += `<div class="feature-card ${activeClass}" onclick="buyOutfit('${o}')">
-                <div class="feature-icon">${outfit.icon}</div>
-                <div class="feature-title">${outfit.name}</div>
-                <div class="feature-cost">${outfit.price}⭐</div>
-            </div>`;
         }
         document.getElementById('outfitsGrid').innerHTML = html;
     }
@@ -1183,7 +1268,7 @@
     setupOutfitsGrid();
     loadGame();
     updateUI();
-    showSpeech("✨ Добро пожаловать в Давид 5.0! ✨");
+    showSpeech("✨ Добро пожаловать в Давид 5.0! Украшения сохраняются навсегда! ✨");
     
     window.upgradeSkill = upgradeSkill;
     window.buyOutfit = buyOutfit;
