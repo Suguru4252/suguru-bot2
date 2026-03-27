@@ -3,108 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Мой Говорящий Давид - Виртуальный питомец</title>
+    <title>Мой Говорящий Давид 3.0 - Волшебный виртуальный друг</title>
     <style>
         * {
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            margin: 0;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', 'Poppins', 'Comic Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            font-family: 'Segoe UI', 'Poppins', 'Comic Neue', system-ui, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Основной контейнер игры */
+        /* Анимированные фоновые элементы */
+        .bg-particle {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+            animation: floatParticle 20s linear infinite;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
         .game-container {
+            position: relative;
+            z-index: 10;
             background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 60px;
+            backdrop-filter: blur(15px);
+            border-radius: 70px;
             padding: 20px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .game-card {
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
-            background: #fff9f0;
-            border-radius: 50px;
+            background: linear-gradient(145deg, #fff9f0, #fff0e0);
+            border-radius: 55px;
             overflow: hidden;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            transition: transform 0.3s;
         }
 
         /* Шапка со статистикой */
         .stats-bar {
-            background: #ffd966;
-            padding: 15px 20px;
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            padding: 18px 20px;
             display: flex;
             justify-content: space-between;
-            gap: 15px;
             flex-wrap: wrap;
-            border-bottom: 4px solid #e6b422;
+            gap: 12px;
+            border-bottom: 3px solid rgba(255,255,255,0.5);
         }
 
         .stat {
-            background: white;
-            border-radius: 40px;
-            padding: 6px 16px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50px;
+            padding: 6px 14px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             font-weight: bold;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            font-size: 1.1rem;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
         }
 
-        .stat span:first-child {
-            font-size: 1.3rem;
+        .stat:hover {
+            transform: scale(1.05);
         }
 
-        .hunger-bar, .happy-bar {
-            width: 80px;
+        .bar-container {
+            width: 70px;
             height: 8px;
             background: #e0e0e0;
             border-radius: 10px;
             overflow: hidden;
         }
 
-        .hunger-fill {
+        .bar-fill {
             height: 100%;
-            width: 100%;
-            background: #4caf50;
-            transition: width 0.3s;
-        }
-
-        .happy-fill {
-            height: 100%;
-            width: 100%;
-            background: #ff9800;
-            transition: width 0.3s;
+            transition: width 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-radius: 10px;
         }
 
         /* Область персонажа */
         .character-area {
-            background: linear-gradient(145deg, #fce5cd, #f8d9b0);
-            padding: 20px;
+            background: linear-gradient(145deg, #a8edea, #fed6e3);
+            padding: 30px 20px;
             text-align: center;
             position: relative;
             cursor: pointer;
+            border-bottom: 4px solid #ffb347;
+            overflow: hidden;
         }
 
-        #davidAvatar {
-            width: 220px;
-            height: 220px;
-            margin: 10px auto;
-            transition: transform 0.1s ease;
-            filter: drop-shadow(8px 12px 12px rgba(0,0,0,0.2));
+        .character-area::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            animation: shine 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translate(-30%, -30%) rotate(0deg);
+            }
+            100% {
+                transform: translate(30%, 30%) rotate(360deg);
+            }
+        }
+
+        #davidCanvas {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            display: block;
+            filter: drop-shadow(12px 16px 20px rgba(0,0,0,0.25));
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        #davidCanvas:active {
+            transform: scale(0.98);
         }
 
         .tap-effect {
@@ -112,407 +177,669 @@
         }
 
         @keyframes bounce {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.95); }
-            100% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.96); }
         }
 
-        /* Облачность для речи */
         .speech-bubble {
             background: white;
-            border-radius: 40px;
-            padding: 12px 20px;
+            border-radius: 35px;
+            padding: 14px 24px;
             display: inline-block;
-            max-width: 80%;
-            margin: 10px auto;
-            font-size: 1.2rem;
-            font-weight: 500;
+            max-width: 90%;
+            margin: 20px auto 0;
+            font-size: 1.15rem;
+            font-weight: 600;
             color: #5a3e2b;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 2px solid #ffb347;
-            animation: fadeInUp 0.3s;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border: 3px solid #ffb347;
+            position: relative;
+            animation: speechPop 0.3s ease;
+        }
+
+        @keyframes speechPop {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            top: -18px;
+            left: 35px;
+            border-width: 0 18px 18px 18px;
+            border-style: solid;
+            border-color: transparent transparent white transparent;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            top: -21px;
+            left: 33px;
+            border-width: 0 20px 20px 20px;
+            border-style: solid;
+            border-color: transparent transparent #ffb347 transparent;
+            z-index: -1;
         }
 
         /* Панель действий */
         .action-panel {
             padding: 20px;
-            background: #fef3e2;
+            background: linear-gradient(145deg, #fff5e8, #ffefdf);
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-            border-bottom: 1px solid #ffd89a;
+            border-bottom: 2px solid #ffe0b5;
         }
 
         .action-btn {
-            background: #ffb347;
+            background: linear-gradient(135deg, #ffb347, #ff8c33);
             border: none;
             padding: 12px 8px;
-            border-radius: 50px;
+            border-radius: 60px;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             cursor: pointer;
             transition: all 0.2s;
             font-family: inherit;
-            box-shadow: 0 4px 0 #c16f1a;
+            box-shadow: 0 5px 0 #c16f1a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .action-btn:active::before {
+            width: 300px;
+            height: 300px;
         }
 
         .action-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 #c16f1a;
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #c16f1a;
         }
 
         .action-btn span:first-child {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
         }
 
-        /* Мини-игра и одежда */
-        .extra-section {
-            padding: 15px 20px 20px;
-            background: #fff4e8;
+        /* Вкладки */
+        .tabs {
             display: flex;
-            flex-direction: column;
+            background: #ffefdf;
+            padding: 0 20px;
+            gap: 5px;
+            border-bottom: 2px solid #ffe0b5;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: transparent;
+            border: none;
+            font-weight: bold;
+            color: #a56b2f;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .tab.active {
+            background: white;
+            color: #ff8c33;
+            box-shadow: 0 -3px 10px rgba(0,0,0,0.05);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: #fff5ea;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Карточки */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 12px;
         }
 
-        .mini-game {
-            background: #ffe0b5;
-            border-radius: 40px;
+        .feature-card {
+            background: linear-gradient(135deg, #fff, #fff5e8);
+            border-radius: 25px;
             padding: 12px;
             text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #ffd89a;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
 
-        .click-game-btn {
-            background: #8b5a2b;
-            color: white;
-            border: none;
-            border-radius: 60px;
-            padding: 10px 20px;
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-color: #ffb347;
+        }
+
+        .feature-card:active {
+            transform: translateY(0);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .feature-title {
             font-weight: bold;
-            cursor: pointer;
-            margin-top: 8px;
+            color: #8b5a2b;
+            font-size: 0.85rem;
         }
 
-        .outfit-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
+        .feature-cost {
+            font-size: 0.7rem;
+            color: #ff8c33;
+            margin-top: 5px;
         }
 
-        .outfit {
-            background: #d9b48b;
-            padding: 6px 12px;
-            border-radius: 30px;
-            cursor: pointer;
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
             font-size: 0.9rem;
-            transition: 0.1s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .level-badge {
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+            border-radius: 30px;
+            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
 
         footer {
             text-align: center;
             padding: 12px;
             font-size: 0.7rem;
-            background: #f7e5d2;
+            background: linear-gradient(145deg, #f7e5d2, #f5e0ca);
             color: #7a5a3a;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
     </style>
 </head>
 <body>
 <div class="game-container">
     <div class="game-card">
-        <!-- Статистика -->
         <div class="stats-bar">
-            <div class="stat"><span>🍔</span> Сытость
-                <div class="hunger-bar"><div class="hunger-fill" id="hungerFill"></div></div>
-                <span id="hungerValue">100</span>%
+            <div class="stat"><span>🍔</span> <span id="hungerValue">100</span>%
+                <div class="bar-container"><div class="bar-fill" id="hungerFill" style="background:#4caf50; width:100%"></div></div>
             </div>
-            <div class="stat"><span>😊</span> Настроение
-                <div class="happy-bar"><div class="happy-fill" id="happyFill"></div></div>
-                <span id="happyValue">100</span>%
+            <div class="stat"><span>😊</span> <span id="happyValue">100</span>%
+                <div class="bar-container"><div class="bar-fill" id="happyFill" style="background:#ff9800; width:100%"></div></div>
             </div>
-            <div class="stat"><span>⭐</span> Монетки <span id="coins">0</span></div>
+            <div class="stat"><span>💤</span> <span id="energyValue">100</span>%
+                <div class="bar-container"><div class="bar-fill" id="energyFill" style="background:#9c27b0; width:100%"></div></div>
+            </div>
+            <div class="stat"><span>⭐</span> <span id="coins">100</span></div>
+            <div class="stat"><span>🎮</span> Ур. <span id="level">1</span></div>
         </div>
 
-        <!-- Персонаж -->
         <div class="character-area" id="characterArea">
-            <img id="davidAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23FBC490'/%3E%3Ccircle cx='35' cy='42' r='4' fill='%234D2E1B'/%3E%3Ccircle cx='65' cy='42' r='4' fill='%234D2E1B'/%3E%3Cpath d='M38 62 Q50 72 62 62' stroke='%238B4513' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Crect x='44' y='18' width='12' height='20' fill='%234D2E1B'/%3E%3C/svg%3E" alt="Давид">
-            <div id="speechText" class="speech-bubble">Привет! Я Давид 😊</div>
+            <canvas id="davidCanvas" width="300" height="300"></canvas>
+            <div id="speechText" class="speech-bubble">✨ Привет! Я Давид 3.0! ✨</div>
         </div>
 
-        <!-- Основные действия -->
         <div class="action-panel">
             <button class="action-btn" id="feedBtn"><span>🍕</span> Покормить</button>
             <button class="action-btn" id="playBtn"><span>⚽</span> Поиграть</button>
-            <button class="action-btn" id="cleanBtn"><span>🚿</span> Помыть</button>
+            <button class="action-btn" id="sleepBtn"><span>😴</span> Спать</button>
             <button class="action-btn" id="petBtn"><span>✋</span> Погладить</button>
         </div>
 
-        <!-- Дополнительные функции: мини-игра и смена одежды -->
-        <div class="extra-section">
-            <div class="mini-game">
-                <strong>🎮 Накорми Давида печеньками 🍪</strong>
-                <div>Кликни, чтобы заработать монетки и поднять сытость!</div>
-                <button class="click-game-btn" id="cookieGameBtn">🍪 +1 Сытость / +2 Монетки</button>
-            </div>
-            <div>
-                <strong>👕 Стиль Давида:</strong>
-                <div class="outfit-buttons">
-                    <div class="outfit" data-outfit="classic">🟤 Классика</div>
-                    <div class="outfit" data-outfit="cool">😎 Крутой</div>
-                    <div class="outfit" data-outfit="cute">🐻 Милашка</div>
+        <div class="tabs">
+            <button class="tab active" data-tab="games">🎮 Игры</button>
+            <button class="tab" data-tab="shop">🛍️ Магазин</button>
+            <button class="tab" data-tab="pets">🐾 Питомец</button>
+            <button class="tab" data-tab="room">🏠 Комната</button>
+        </div>
+
+        <!-- Вкладка Игры -->
+        <div class="tab-content active" id="games-tab">
+            <div class="game-grid">
+                <div class="feature-card" data-game="fish">
+                    <div class="feature-icon">🐟</div>
+                    <div class="feature-title">Рыбалка</div>
+                    <div class="feature-cost">+10-30⭐</div>
+                </div>
+                <div class="feature-card" data-game="exercise">
+                    <div class="feature-icon">🏃‍♂️</div>
+                    <div class="feature-title">Зарядка</div>
+                    <div class="feature-cost">+15💤</div>
+                </div>
+                <div class="feature-card" data-game="quiz">
+                    <div class="feature-icon">❓</div>
+                    <div class="feature-title">Викторина</div>
+                    <div class="feature-cost">+20⭐ +😊</div>
+                </div>
+                <div class="feature-card" data-game="memory">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-title">Память</div>
+                    <div class="feature-cost">+25⭐</div>
                 </div>
             </div>
+            <div class="level-badge" style="margin-top: 15px;">
+                <span>🎯</span> Ежедневный бонус: <span id="dailyBonus">забрать</span>
+            </div>
         </div>
-        <footer>💬 Нажми на Давида - он скажет что-то! Каждые 30 сек параметры снижаются</footer>
+
+        <!-- Вкладка Магазин -->
+        <div class="tab-content" id="shop-tab">
+            <div class="game-grid">
+                <div class="feature-card" data-shop="pizza"><div class="feature-icon">🍕</div><div class="feature-title">Пицца</div><div class="feature-cost">20⭐ +40🍔</div></div>
+                <div class="feature-card" data-shop="toy"><div class="feature-icon">🧸</div><div class="feature-title">Игрушка</div><div class="feature-cost">30⭐ +35😊</div></div>
+                <div class="feature-card" data-shop="energy"><div class="feature-icon">⚡</div><div class="feature-title">Энергетик</div><div class="feature-cost">15⭐ +30💤</div></div>
+                <div class="feature-card" data-shop="cake"><div class="feature-icon">🎂</div><div class="feature-title">Торт</div><div class="feature-cost">50⭐ +60🍔 +20😊</div></div>
+                <div class="feature-card" data-shop="hat"><div class="feature-icon">🧢</div><div class="feature-title">Шляпа</div><div class="feature-cost">100⭐ Аксессуар</div></div>
+                <div class="feature-card" data-shop="scarf"><div class="feature-icon">🧣</div><div class="feature-title">Шарф</div><div class="feature-cost">80⭐ Аксессуар</div></div>
+            </div>
+        </div>
+
+        <!-- Вкладка Питомец -->
+        <div class="tab-content" id="pets-tab">
+            <div class="game-grid">
+                <div class="feature-card" data-pet="cat"><div class="feature-icon">🐱</div><div class="feature-title">Котенок</div><div class="feature-cost">150⭐</div></div>
+                <div class="feature-card" data-pet="dog"><div class="feature-icon">🐶</div><div class="feature-title">Щенок</div><div class="feature-cost">200⭐</div></div>
+                <div class="feature-card" data-pet="bird"><div class="feature-icon">🐦</div><div class="feature-title">Птичка</div><div class="feature-cost">100⭐</div></div>
+            </div>
+            <div id="petDisplay" style="text-align: center; margin-top: 15px; padding: 10px; background: #ffe0b5; border-radius: 30px;">
+                🐾 Нет питомца. Купи друга!
+            </div>
+        </div>
+
+        <!-- Вкладка Комната -->
+        <div class="tab-content" id="room-tab">
+            <div class="game-grid">
+                <div class="feature-card" data-room="bg1"><div class="feature-icon">🌳</div><div class="feature-title">Лес</div><div class="feature-cost">80⭐</div></div>
+                <div class="feature-card" data-room="bg2"><div class="feature-icon">🌊</div><div class="feature-title">Пляж</div><div class="feature-cost">80⭐</div></div>
+                <div class="feature-card" data-room="bg3"><div class="feature-icon">🌙</div><div class="feature-title">Ночь</div><div class="feature-cost">80⭐</div></div>
+            </div>
+        </div>
+        <footer>✨ Нажми на Давида! Новые функции каждую неделю ✨</footer>
     </div>
 </div>
 
 <script>
-    // ---------- Игровые параметры ----------
-    let hunger = 100;       // сытость 0-100
-    let happiness = 100;    // настроение
-    let coins = 0;
-
-    // Элементы DOM
-    const hungerFill = document.getElementById('hungerFill');
-    const happyFill = document.getElementById('happyFill');
-    const hungerValueSpan = document.getElementById('hungerValue');
-    const happyValueSpan = document.getElementById('happyValue');
-    const coinsSpan = document.getElementById('coins');
-    const davidImg = document.getElementById('davidAvatar');
-    const speechDiv = document.getElementById('speechText');
-    const characterArea = document.getElementById('characterArea');
-
-    // Фразы для разного настроения
-    const happyPhrases = [
-        "Я супер счастлив! 🎉", "Обнимашки? 🤗", "Ты мой лучший друг! ❤️", 
-        "Какой классный день!", "Давай играть!", "Спасибо, друг!"
-    ];
-    const normalPhrases = [
-        "Приветик :)", "Погладь меня!", "Хочу кушать...", "Скучно... поиграем?",
-        "Ты где был?", "Монетки блестят ✨"
-    ];
-    const sadPhrases = [
-        "Мне грустно... 💔", "Покорми меня, пожалуйста", "Я голодный :(",
-        "Настроение упало...", "Поиграй со мной!", "Обними меня..."
-    ];
-    const hungryPhrases = [
-        "Очень хочу есть! 🍔", "Живот урчит...", "Дай поесть!", 
-        "Пицца? Суши? Что угодно!", "Голодный Давид 😭"
-    ];
-
-    // Смена аватара (одежды / стиля)
-    const outfits = {
-        classic: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23FBC490'/%3E%3Ccircle cx='35' cy='42' r='4' fill='%234D2E1B'/%3E%3Ccircle cx='65' cy='42' r='4' fill='%234D2E1B'/%3E%3Cpath d='M38 62 Q50 72 62 62' stroke='%238B4513' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Crect x='44' y='18' width='12' height='20' fill='%234D2E1B'/%3E%3C/svg%3E",
-        cool: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23FBC490'/%3E%3Ccircle cx='35' cy='42' r='4' fill='%234D2E1B'/%3E%3Ccircle cx='65' cy='42' r='4' fill='%234D2E1B'/%3E%3Cpath d='M38 62 Q50 72 62 62' stroke='%238B4513' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3Cpolygon points='44,20 56,20 60,30 40,30' fill='black'/%3E%3Ctext x='45' y='85' font-size='12' fill='gray'%3E😎%3C/text%3E%3C/svg%3E",
-        cute: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23FBC490'/%3E%3Ccircle cx='35' cy='42' r='4' fill='%234D2E1B'/%3E%3Ccircle cx='65' cy='42' r='4' fill='%234D2E1B'/%3E%3Cpath d='M38 62 Q50 72 62 62' stroke='%23FF69B4' stroke-width='3' fill='none'/%3E%3Ccircle cx='50' cy='28' r='6' fill='pink'/%3E%3C/svg%3E"
-    };
-
-    function setOutfit(style) {
-        if(outfits[style]) {
-            davidImg.src = outfits[style];
-            showSpeech("Новый образ! Как тебе? 😎");
-        }
+    // Игровые параметры
+    let hunger = 100, happiness = 100, energy = 100, coins = 100, level = 1, exp = 0;
+    let feedCount = 0, playCount = 0;
+    let pet = null, room = 'default';
+    let hat = false, scarf = false;
+    let lastDaily = Date.now();
+    
+    // DOM элементы
+    const canvas = document.getElementById('davidCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    function showNotification(msg, isError = false) {
+        const notif = document.createElement('div');
+        notif.className = 'notification';
+        notif.style.background = isError ? 'linear-gradient(135deg, #f44336, #d32f2f)' : 'linear-gradient(135deg, #4caf50, #45a049)';
+        notif.textContent = msg;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 2500);
     }
-
-    // Обновление интерфейса (полоски, текст)
+    
     function updateUI() {
         hunger = Math.min(100, Math.max(0, hunger));
         happiness = Math.min(100, Math.max(0, happiness));
-        hungerFill.style.width = hunger + "%";
-        happyFill.style.width = happiness + "%";
-        hungerValueSpan.innerText = Math.floor(hunger);
-        happyValueSpan.innerText = Math.floor(happiness);
-        coinsSpan.innerText = coins;
+        energy = Math.min(100, Math.max(0, energy));
+        
+        document.getElementById('hungerFill').style.width = hunger + '%';
+        document.getElementById('happyFill').style.width = happiness + '%';
+        document.getElementById('energyFill').style.width = energy + '%';
+        document.getElementById('hungerValue').innerText = Math.floor(hunger);
+        document.getElementById('happyValue').innerText = Math.floor(happiness);
+        document.getElementById('energyValue').innerText = Math.floor(energy);
+        document.getElementById('coins').innerText = coins;
+        document.getElementById('level').innerText = level;
+        
+        drawDavid();
+        checkLevelUp();
     }
-
-    // Показать речь с анимацией
-    function showSpeech(message) {
+    
+    function checkLevelUp() {
+        let expNeeded = level * 100;
+        if (exp >= expNeeded) {
+            exp -= expNeeded;
+            level++;
+            showNotification(`🎉 УРОВЕНЬ ${level}! 🎉 Получено 50 монет!`);
+            coins += 50;
+            updateUI();
+        }
+    }
+    
+    function addExp(amount) {
+        exp += amount;
+        checkLevelUp();
+        updateUI();
+    }
+    
+    function showSpeech(msg) {
+        const speechDiv = document.getElementById('speechText');
+        speechDiv.innerText = msg;
         speechDiv.style.animation = 'none';
-        speechDiv.offsetHeight; // reflow
-        speechDiv.innerText = message;
-        speechDiv.style.animation = 'fadeInUp 0.3s';
-        // Автоисчезновение через 3 секунды? Нет, но можно оставить, но лучше пусть остается новое сообщение
-        setTimeout(() => {
-            if(speechDiv.innerText === message) {
-                // если за это время ничего не поменяли - оставим но можно без изменений
-            }
-        }, 4000);
+        speechDiv.offsetHeight;
+        speechDiv.style.animation = 'speechPop 0.3s ease';
     }
-
-    // Фразы в зависимости от параметров
-    function getContextPhrase() {
-        if(hunger < 30) {
-            return hungryPhrases[Math.floor(Math.random() * hungryPhrases.length)];
-        } else if(happiness < 35) {
-            return sadPhrases[Math.floor(Math.random() * sadPhrases.length)];
-        } else if(happiness > 75 && hunger > 70) {
-            return happyPhrases[Math.floor(Math.random() * happyPhrases.length)];
+    
+    // Рисование красивого персонажа
+    function drawDavid() {
+        ctx.clearRect(0, 0, 300, 300);
+        
+        // Фон комнаты
+        if (room === 'bg1') {
+            ctx.fillStyle = '#90EE90';
+            ctx.fillRect(0, 0, 300, 300);
+            for(let i=0;i<10;i++) ctx.fillStyle = '#228B22', ctx.fillRect(Math.random()*300, Math.random()*300, 3, 8);
+        } else if (room === 'bg2') {
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, 300, 300);
+            ctx.fillStyle = '#F4A460';
+            for(let i=0;i<5;i++) ctx.fillRect(20+i*60, 250, 40, 50);
+        } else if (room === 'bg3') {
+            ctx.fillStyle = '#191970';
+            ctx.fillRect(0, 0, 300, 300);
+            ctx.fillStyle = '#FFD700';
+            for(let i=0;i<20;i++) ctx.fillRect(Math.random()*300, Math.random()*300, 2, 2);
         } else {
-            return normalPhrases[Math.floor(Math.random() * normalPhrases.length)];
+            ctx.fillStyle = '#FCE5CD';
+            ctx.fillRect(0, 0, 300, 300);
         }
-    }
-
-    // Действие "Покормить"
-    function feed() {
-        let increase = 20 + Math.floor(Math.random() * 10);
-        hunger = Math.min(100, hunger + increase);
-        happiness = Math.min(100, happiness + 5);
-        coins += 3;
-        updateUI();
-        showSpeech("Ням-ням! Спасибо! 🍔 +" + increase + " сытость");
-        animateAvatar();
-        checkLimits();
-    }
-
-    // Поиграть
-    function play() {
-        if(hunger <= 15) {
-            showSpeech("Я голодный, не могу играть... Сначала покорми! 🍕");
-            return;
+        
+        // Тело
+        ctx.fillStyle = '#FBC490';
+        ctx.beginPath();
+        ctx.ellipse(150, 170, 70, 85, 0, 0, Math.PI*2);
+        ctx.fill();
+        
+        // Голова
+        ctx.fillStyle = '#FBC490';
+        ctx.beginPath();
+        ctx.ellipse(150, 110, 65, 70, 0, 0, Math.PI*2);
+        ctx.fill();
+        
+        // Уши
+        ctx.fillStyle = '#E8A87C';
+        ctx.beginPath();
+        ctx.ellipse(95, 80, 22, 30, -0.3, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(205, 80, 22, 30, 0.3, 0, Math.PI*2);
+        ctx.fill();
+        
+        // Волосы
+        ctx.fillStyle = '#8B5A2B';
+        ctx.beginPath();
+        ctx.ellipse(150, 75, 55, 30, 0, 0, Math.PI*2);
+        ctx.fill();
+        
+        // Аксессуары
+        if (hat) {
+            ctx.fillStyle = '#FF6B6B';
+            ctx.fillRect(115, 50, 70, 25);
+            ctx.fillStyle = '#FF8C8C';
+            ctx.beginPath();
+            ctx.ellipse(150, 55, 40, 15, 0, 0, Math.PI*2);
+            ctx.fill();
         }
-        let happyGain = 15 + Math.floor(Math.random() * 15);
-        happiness = Math.min(100, happiness + happyGain);
-        hunger = Math.max(0, hunger - 5);
-        coins += 2;
-        updateUI();
-        showSpeech("Ура! Играть весело! ⚽ +" + happyGain + " настроение");
-        animateAvatar();
-        checkLimits();
-    }
-
-    // Помыть
-    function clean() {
-        happiness = Math.min(100, happiness + 8);
-        showSpeech("Я чистый и свежий! 🚿✨");
-        animateAvatar();
-        updateUI();
-        checkLimits();
-    }
-
-    // Погладить
-    function pet() {
-        happiness = Math.min(100, happiness + 12);
-        coins += 1;
-        showSpeech("Мурлык... Спасибо! ❤️");
-        animateAvatar();
-        updateUI();
-        checkLimits();
-    }
-
-    // Мини-игра: кликер печеньки
-    function cookieGame() {
-        let gainHunger = 1;
-        let gainCoins = 2;
-        hunger = Math.min(100, hunger + gainHunger);
-        coins += gainCoins;
-        updateUI();
-        showSpeech("🍪 Вкусняшка! +1 сытость, +2 монетки");
-        animateAvatar();
-        if(hunger >= 95) {
-            showSpeech("Я наелся! Спасибо за печеньки 😋");
+        if (scarf) {
+            ctx.fillStyle = '#FF69B4';
+            ctx.fillRect(120, 125, 60, 20);
         }
-        checkLimits();
-    }
-
-    // анимация при нажатии
-    function animateAvatar() {
-        davidImg.classList.add('tap-effect');
-        setTimeout(() => {
-            davidImg.classList.remove('tap-effect');
-        }, 200);
-    }
-
-    // проверка граничных состояний (смерть или экстрим)
-    function checkLimits() {
-        if(hunger <= 0) {
-            hunger = 0;
-            showSpeech("Я умираю от голода... покорми меня скорее! 💀");
-            happiness = Math.max(0, happiness - 15);
-            updateUI();
-        }
-        if(happiness <= 0) {
-            happiness = 0;
-            showSpeech("Мне очень плохо... поиграй или погладь 😢");
-        }
-        if(hunger >= 90 && happiness >= 80) {
-            // дополнительная радость
-            if(Math.random() < 0.3) showSpeech("Я счастлив! Спасибо, что заботишься! 🌟");
-        }
-        updateUI();
-    }
-
-    // Клик по персонажу (говорит случайную фразу)
-    function onCharacterTap() {
-        let phrase = getContextPhrase();
-        showSpeech(phrase);
-        animateAvatar();
-        // маленький бонус за клик (ласка)
-        if(Math.random() < 0.4) {
-            happiness = Math.min(100, happiness + 2);
-            updateUI();
-        }
-    }
-
-    // Система ухудшения параметров со временем (каждые 30 сек)
-    let decayInterval;
-    function startDecay() {
-        decayInterval = setInterval(() => {
-            hunger = Math.max(0, hunger - 5);
-            happiness = Math.max(0, happiness - 3);
-            updateUI();
-            if(hunger <= 20 || happiness <= 20) {
-                showSpeech(getContextPhrase());
-            } else if (Math.random() < 0.2) {
-                // иногда просто случайная фраза
-                showSpeech(getContextPhrase());
-            }
-            checkLimits();
-        }, 30000); // 30 секунд
-    }
-
-    // Загрузка и старт
-    function init() {
-        updateUI();
-        startDecay();
-        // Добавляем слушатели
-        document.getElementById('feedBtn').addEventListener('click', feed);
-        document.getElementById('playBtn').addEventListener('click', play);
-        document.getElementById('cleanBtn').addEventListener('click', clean);
-        document.getElementById('petBtn').addEventListener('click', pet);
-        document.getElementById('cookieGameBtn').addEventListener('click', cookieGame);
-        characterArea.addEventListener('click', onCharacterTap);
+        
+        // Глаза
+        ctx.fillStyle = '#4D2E1B';
+        ctx.beginPath();
+        ctx.arc(120, 105, 8, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(180, 105, 8, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(117, 102, 2, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(177, 102, 2, 0, Math.PI*2);
+        ctx.fill();
+        
+        // Рот
+        ctx.beginPath();
+        ctx.strokeStyle = '#8B4513';
+        ctx.lineWidth = 3;
+        if (happiness > 60) ctx.arc(150, 130, 20, 0.1, Math.PI-0.1);
+        else if (happiness < 30) ctx.arc(150, 140, 18, Math.PI, Math.PI*2);
+        else ctx.arc(150, 130, 18, 0.2, Math.PI-0.2);
+        ctx.stroke();
+        
+        // Руки и ноги
+        ctx.fillStyle = '#FBC490';
+        ctx.beginPath();
+        ctx.ellipse(95, 165, 18, 30, -0.5, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(205, 165, 18, 30, 0.5, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#E8A87C';
+        ctx.beginPath();
+        ctx.ellipse(130, 235, 18, 28, 0, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(170, 235, 18, 28, 0, 0, Math.PI*2);
+        ctx.fill();
         
         // Одежда
-        document.querySelectorAll('.outfit').forEach(el => {
-            el.addEventListener('click', (e) => {
-                const style = el.getAttribute('data-outfit');
-                setOutfit(style);
-            });
-        });
-
-        // начальная фраза
-        setTimeout(() => {
-            showSpeech("Давид здесь! Заботься обо мне 💙");
-        }, 500);
+        ctx.fillStyle = '#FF6B6B';
+        ctx.beginPath();
+        ctx.rect(125, 145, 50, 70);
+        ctx.fill();
+        ctx.fillStyle = '#4A90E2';
+        ctx.fillRect(125, 200, 50, 35);
+        
+        // Питомец
+        if (pet === 'cat') {
+            ctx.fillStyle = '#FFA500';
+            ctx.beginPath();
+            ctx.ellipse(220, 50, 15, 12, 0, 0, Math.PI*2);
+            ctx.fill();
+            ctx.fillStyle = '#000';
+            ctx.fillRect(215, 45, 3, 3);
+            ctx.fillRect(225, 45, 3, 3);
+        } else if (pet === 'dog') {
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.ellipse(220, 50, 12, 12, 0, 0, Math.PI*2);
+            ctx.fill();
+        } else if (pet === 'bird') {
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.moveTo(220, 45);
+            ctx.lineTo(225, 52);
+            ctx.lineTo(215, 52);
+            ctx.fill();
+        }
     }
-
-    init();
+    
+    // Действия
+    function feed() { if(coins>=5 && hunger<95){ coins-=5; hunger=Math.min(100,hunger+25); happiness+=5; feedCount++; addExp(10); showSpeech("Ням-ням! 🍕"); updateUI(); } else showSpeech("Нужно 5⭐ или я сыт!"); }
+    function play() { if(energy>=15 && hunger>=20){ let gain=12+Math.random()*10; happiness=Math.min(100,happiness+gain); energy-=12; coins+=3; playCount++; addExp(8); showSpeech("Весело! ⚽"); updateUI(); } else showSpeech("Устал или голоден!"); }
+    function sleep() { let gain=35+Math.random()*20; energy=Math.min(100,energy+gain); happiness+=8; addExp(5); showSpeech("Zzz... 💤"); updateUI(); }
+    function pet() { happiness=Math.min(100,happiness+10); coins+=2; addExp(3); showSpeech("Мур! ❤️"); updateUI(); }
+    
+    // Мини-игры
+    function fishGame() { if(energy>=10){ let earn=10+Math.floor(Math.random()*25); coins+=earn; energy-=8; addExp(12); showSpeech(`🐟 +${earn}⭐!`); updateUI(); } else showSpeech("Нужна энергия!"); }
+    function exerciseGame() { if(hunger>=15){ let gain=15+Math.floor(Math.random()*15); energy=Math.min(100,energy+gain); hunger-=8; addExp(10); showSpeech(`🏃 +${gain} энергии!`); updateUI(); } else showSpeech("Сначала поешь!"); }
+    function quizGame() { let earn=15+Math.floor(Math.random()*20); coins+=earn; happiness=Math.min(100,happiness+12); addExp(15); showSpeech(`❓ Умница! +${earn}⭐`); updateUI(); }
+    function memoryGame() { let earn=20+Math.floor(Math.random()*20); coins+=earn; addExp(18); showSpeech(`🧠 Отлично! +${earn}⭐`); updateUI(); }
+    
+    function dailyBonus() {
+        let now = Date.now();
+        if(now - lastDaily > 86400000) {
+            let bonus = 50 + level*10;
+            coins += bonus;
+            lastDaily = now;
+            showNotification(`🎁 Ежедневный бонус: ${bonus}⭐!`);
+            updateUI();
+        } else showNotification("Бонус уже получен! Завтра будет новый!", true);
+    }
+    
+    function buyShop(item) {
+        if(item==='pizza' && coins>=20){ coins-=20; hunger=Math.min(100,hunger+40); showSpeech("🍕 Вкусно!"); }
+        else if(item==='toy' && coins>=30){ coins-=30; happiness=Math.min(100,happiness+35); showSpeech("🧸 Новая игрушка!"); }
+        else if(item==='energy' && coins>=15){ coins-=15; energy=Math.min(100,energy+30); showSpeech("⚡ Энергично!"); }
+        else if(item==='cake' && coins>=50){ coins-=50; hunger=Math.min(100,hunger+60); happiness=Math.min(100,happiness+20); showSpeech("🎂 Торт супер!"); }
+        else if(item==='hat' && coins>=100 && !hat){ coins-=100; hat=true; showSpeech("🧢 Крутая шляпа!"); }
+        else if(item==='scarf' && coins>=80 && !scarf){ coins-=80; scarf=true; showSpeech("🧣 Теплый шарф!"); }
+        else { showSpeech("Не хватает⭐ или уже куплено!"); return; }
+        updateUI();
+    }
+    
+    function buyPet(petType) {
+        let cost = {cat:150, dog:200, bird:100}[petType];
+        if(coins>=cost && !pet){
+            coins-=cost; pet=petType;
+            showNotification(`🐾 У тебя теперь ${petType==='cat'?'котенок':petType==='dog'?'щенок':'птичка'}!`);
+            document.getElementById('petDisplay').innerHTML = `🐾 Твой питомец: ${petType==='cat'?'🐱 Котенок':petType==='dog'?'🐶 Щенок':'🐦 Птичка'} радуется!`;
+            updateUI();
+        } else showNotification("Не хватает⭐ или уже есть питомец!", true);
+    }
+    
+    function buyRoom(roomType) {
+        if(coins>=80 && room!==roomType){
+            coins-=80; room=roomType;
+            showNotification(`🏠 Комната изменена!`);
+            updateUI();
+        } else showNotification("Не хватает⭐!", true);
+    }
+    
+    // Ухудшение параметров
+    setInterval(() => {
+        hunger = Math.max(0, hunger - 3);
+        happiness = Math.max(0, happiness - 2);
+        energy = Math.max(0, energy - 3);
+        updateUI();
+        if(Math.random()<0.2) showSpeech(["Как дела?","Поиграем?","Я скучаю..."][Math.floor(Math.random()*3)]);
+    }, 28000);
+    
+    // Обработчики
+    document.getElementById('feedBtn').onclick = feed;
+    document.getElementById('playBtn').onclick = play;
+    document.getElementById('sleepBtn').onclick = sleep;
+    document.getElementById('petBtn').onclick = pet;
+    document.getElementById('characterArea').onclick = () => { showSpeech("Привет, друг! 😊"); happiness=Math.min(100,happiness+2); updateUI(); };
+    
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.onclick = () => {
+            document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+        };
+    });
+    
+    document.querySelectorAll('[data-game]').forEach(el => {
+        el.onclick = () => {
+            let game = el.dataset.game;
+            if(game==='fish') fishGame();
+            else if(game==='exercise') exerciseGame();
+            else if(game==='quiz') quizGame();
+            else if(game==='memory') memoryGame();
+        };
+    });
+    
+    document.querySelectorAll('[data-shop]').forEach(el => {
+        el.onclick = () => buyShop(el.dataset.shop);
+    });
+    
+    document.querySelectorAll('[data-pet]').forEach(el => {
+        el.onclick = () => buyPet(el.dataset.pet);
+    });
+    
+    document.querySelectorAll('[data-room]').forEach(el => {
+        el.onclick = () => buyRoom(el.dataset.room);
+    });
+    
+    document.getElementById('dailyBonus').onclick = dailyBonus;
+    
+    updateUI();
+    drawDavid();
+    
+    // Фоновые частицы
+    for(let i=0;i<30;i++){
+        let p = document.createElement('div');
+        p.className = 'bg-particle';
+        p.innerHTML = ['⭐','✨','🌟','💫','⚡','🍕','🐟','🎮'][Math.floor(Math.random()*8)];
+        p.style.left = Math.random()*100+'%';
+        p.style.animationDuration = 15+Math.random()*20+'s';
+        p.style.animationDelay = Math.random()*20+'s';
+        document.body.appendChild(p);
+    }
 </script>
 </body>
 </html>
