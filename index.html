@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Chugur | Социальная сеть с сообщениями</title>
+    <title>Chugur | Социальная сеть</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -86,11 +86,6 @@
 
         .post-textarea::placeholder {
             color: rgba(255,255,255,0.5);
-        }
-
-        .post-textarea:focus {
-            outline: none;
-            border-color: #ff6b6b;
         }
 
         .image-preview {
@@ -323,7 +318,6 @@
             min-width: 18px;
         }
 
-        /* Поиск и чаты */
         .search-container {
             background: rgba(255,255,255,0.08);
             border-radius: 30px;
@@ -369,11 +363,6 @@
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .user-item:active {
-            background: rgba(255,255,255,0.15);
         }
 
         .user-item-avatar {
@@ -397,7 +386,6 @@
             opacity: 0.6;
         }
 
-        /* Чат */
         .chat-container {
             display: flex;
             flex-direction: column;
@@ -438,10 +426,6 @@
             border-radius: 12px;
             cursor: pointer;
             margin-top: 5px;
-        }
-
-        .message-text {
-            font-size: 14px;
         }
 
         .message-time {
@@ -517,6 +501,10 @@
             color: #fff;
         }
 
+        .auth-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
         .auth-btn {
             background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
             color: white;
@@ -572,14 +560,13 @@
         }
 
         input[type="file"] { display: none; }
-        .hidden { display: none; }
     </style>
 </head>
 <body>
     <div class="app">
         <div class="header" id="header">
             <div class="logo" onclick="goHome()">Chugur</div>
-            <button class="refresh-btn" id="headerBtn" onclick="refreshFeed()">🔄</button>
+            <button class="refresh-btn" id="headerBtn" onclick="refreshCurrentView()">🔄</button>
         </div>
 
         <div id="authContainer"></div>
@@ -639,11 +626,12 @@
             container.innerHTML = `
                 <div class="auth-section">
                     <div class="auth-card">
-                        <h2 style="margin-bottom: 20px;">Chugur</h2>
-                        <input type="text" id="loginUsername" class="auth-input" placeholder="Имя пользователя">
+                        <h2 style="margin-bottom: 20px;">🔮 Chugur</h2>
+                        <p style="margin-bottom: 20px; opacity: 0.7;">Войдите или создайте аккаунт</p>
+                        <input type="text" id="loginUsername" class="auth-input" placeholder="Ваш username (уникальный)">
                         <input type="password" id="loginPassword" class="auth-input" placeholder="Пароль">
                         <button class="auth-btn" onclick="login()">Войти</button>
-                        <div class="switch-auth" onclick="showRegister()">Нет аккаунта? Регистрация</div>
+                        <div class="switch-auth" onclick="showRegister()">✨ Создать новый аккаунт</div>
                     </div>
                 </div>
             `;
@@ -654,20 +642,21 @@
             container.innerHTML = `
                 <div class="auth-section">
                     <div class="auth-card">
-                        <h2 style="margin-bottom: 20px;">Регистрация</h2>
-                        <input type="text" id="regUsername" class="auth-input" placeholder="Имя пользователя">
+                        <h2 style="margin-bottom: 20px;">📝 Создать аккаунт</h2>
+                        <input type="text" id="regUsername" class="auth-input" placeholder="Придумайте username (например: john_doe)">
                         <input type="password" id="regPassword" class="auth-input" placeholder="Пароль">
-                        <input type="text" id="regName" class="auth-input" placeholder="Ваше имя">
+                        <input type="text" id="regName" class="auth-input" placeholder="Ваше имя (как вас будут видеть)">
                         <button class="auth-btn" onclick="register()">Зарегистрироваться</button>
-                        <div class="switch-auth" onclick="renderAuth()">Уже есть аккаунт? Войти</div>
+                        <div class="switch-auth" onclick="renderAuth()">← Назад к входу</div>
                     </div>
                 </div>
             `;
         }
 
         function login() {
-            const username = document.getElementById('loginUsername').value.trim();
+            const username = document.getElementById('loginUsername').value.trim().toLowerCase();
             const password = document.getElementById('loginPassword').value;
+            
             const user = users.find(u => u.username === username && u.password === password);
             
             if (user) {
@@ -675,17 +664,29 @@
                 localStorage.setItem('chugur_current_user', JSON.stringify(currentUser));
                 startApp();
             } else {
-                alert('Неверное имя или пароль');
+                alert('❌ Неверный username или пароль');
             }
         }
 
         function register() {
-            const username = document.getElementById('regUsername').value.trim();
+            const username = document.getElementById('regUsername').value.trim().toLowerCase();
             const password = document.getElementById('regPassword').value;
             const name = document.getElementById('regName').value.trim();
             
-            if (!username || !password) { alert('Заполните все поля'); return; }
-            if (users.find(u => u.username === username)) { alert('Пользователь уже существует'); return; }
+            if (!username || !password) {
+                alert('❌ Заполните все поля');
+                return;
+            }
+            
+            if (username.length < 3) {
+                alert('❌ Username должен быть не менее 3 символов');
+                return;
+            }
+            
+            if (users.find(u => u.username === username)) {
+                alert('❌ Пользователь с таким username уже существует! Придумайте другой.');
+                return;
+            }
             
             const newUser = {
                 id: Date.now().toString(),
@@ -701,6 +702,7 @@
             currentUser = newUser;
             localStorage.setItem('chugur_current_user', JSON.stringify(currentUser));
             startApp();
+            alert('✅ Аккаунт создан! Теперь вы можете найти себя по username: ' + username);
         }
 
         function logout() {
@@ -741,6 +743,7 @@
                 id: Date.now().toString(),
                 userId: currentUser.id,
                 userName: currentUser.name,
+                userUsername: currentUser.username,
                 userAvatar: currentUser.avatar || `https://ui-avatars.com/api/?background=ff6b6b&color=fff&bold=true&size=48&name=${encodeURIComponent(currentUser.name)}`,
                 text: text,
                 image: selectedImageData || '',
@@ -798,7 +801,11 @@
             
             input.value = '';
             chatImageData = null;
-            document.getElementById('chatImagePreview').style.display = 'none';
+            const preview = document.getElementById('chatImagePreview');
+            if (preview) {
+                preview.style.display = 'none';
+                preview.innerHTML = '';
+            }
             renderChat();
         }
 
@@ -809,7 +816,7 @@
                 reader.onload = (event) => {
                     chatImageData = event.target.result;
                     const preview = document.getElementById('chatImagePreview');
-                    preview.innerHTML = `<img src="${chatImageData}" style="max-width: 80px; border-radius: 8px;"><button onclick="removeChatImage()" style="background:red; border:none; border-radius:50%; width:20px;">✕</button>`;
+                    preview.innerHTML = `<div style="position:relative; display:inline-block;"><img src="${chatImageData}" style="max-width: 60px; max-height: 60px; border-radius: 8px;"><button onclick="removeChatImage()" style="position:absolute; top:-5px; right:-5px; background:red; border:none; border-radius:50%; width:20px; height:20px; color:white; cursor:pointer;">✕</button></div>`;
                     preview.style.display = 'block';
                 };
                 reader.readAsDataURL(file);
@@ -818,8 +825,11 @@
 
         function removeChatImage() {
             chatImageData = null;
-            document.getElementById('chatImagePreview').style.display = 'none';
-            document.getElementById('chatImagePreview').innerHTML = '';
+            const preview = document.getElementById('chatImagePreview');
+            if (preview) {
+                preview.style.display = 'none';
+                preview.innerHTML = '';
+            }
         }
 
         function getChatMessages() {
@@ -839,7 +849,6 @@
             backBtn.className = 'back-btn';
             backBtn.innerHTML = '←';
             backBtn.onclick = () => { currentChatUser = null; showMessages(); };
-            backBtn.style.cssText = 'background:rgba(255,255,255,0.1); border:none; font-size:24px; cursor:pointer; padding:8px 12px; border-radius:30px; color:#fff;';
             header.insertBefore(backBtn, header.firstChild);
             
             const chatMsgs = getChatMessages();
@@ -847,7 +856,8 @@
             document.getElementById('mainContent').innerHTML = `
                 <div class="chat-container">
                     <div style="padding:15px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.1);">
-                        <strong>${escapeHtml(currentChatUser.name)}</strong> <span style="opacity:0.6;">@${escapeHtml(currentChatUser.username)}</span>
+                        <strong>${escapeHtml(currentChatUser.name)}</strong><br>
+                        <span style="opacity:0.6; font-size:12px;">@${escapeHtml(currentChatUser.username)}</span>
                     </div>
                     <div class="chat-messages" id="chatMessages"></div>
                     <div id="chatImagePreview" style="padding:0 15px; display:none;"></div>
@@ -883,35 +893,37 @@
             const oldBack = document.querySelector('.back-btn');
             if (oldBack) oldBack.remove();
             
-            const userMessages = [];
+            const dialogs = [];
             users.forEach(user => {
                 if (user.id !== currentUser.id) {
-                    const lastMsg = [...messages].filter(m => 
+                    const userMessages = messages.filter(m => 
                         (m.fromId === currentUser.id && m.toId === user.id) ||
                         (m.fromId === user.id && m.toId === currentUser.id)
-                    ).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
-                    
-                    if (lastMsg) {
-                        userMessages.push({ user, lastMsg });
+                    );
+                    if (userMessages.length > 0) {
+                        const lastMsg = userMessages.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+                        dialogs.push({ user, lastMsg });
                     }
                 }
             });
             
+            dialogs.sort((a,b) => new Date(b.lastMsg.timestamp) - new Date(a.lastMsg.timestamp));
+            
             document.getElementById('mainContent').innerHTML = `
                 <div class="content">
-                    <h3 style="margin-bottom: 15px;">💬 Сообщения</h3>
+                    <h3 style="margin-bottom: 15px;">💬 Диалоги</h3>
                     <div class="user-list" id="chatList">
-                        ${userMessages.map(um => `
-                            <div class="user-item" onclick="openChat('${um.user.id}')">
-                                <img class="user-item-avatar" src="${um.user.avatar || `https://ui-avatars.com/api/?background=ff6b6b&color=fff&bold=true&size=50&name=${encodeURIComponent(um.user.name)}`}">
+                        ${dialogs.map(d => `
+                            <div class="user-item" onclick="openChat('${d.user.id}')">
+                                <img class="user-item-avatar" src="${d.user.avatar || `https://ui-avatars.com/api/?background=ff6b6b&color=fff&bold=true&size=50&name=${encodeURIComponent(d.user.name)}`}">
                                 <div class="user-item-info">
-                                    <div class="user-item-name">${escapeHtml(um.user.name)}</div>
-                                    <div class="user-item-username">@${escapeHtml(um.user.username)}</div>
-                                    <div style="font-size:12px; opacity:0.6;">${um.lastMsg.text ? um.lastMsg.text.slice(0,30) : '📷 Фото'}</div>
+                                    <div class="user-item-name">${escapeHtml(d.user.name)}</div>
+                                    <div class="user-item-username">@${escapeHtml(d.user.username)}</div>
+                                    <div style="font-size:12px; opacity:0.6;">${d.lastMsg.text ? (d.lastMsg.text.length > 30 ? d.lastMsg.text.slice(0,30)+'...' : d.lastMsg.text) : '📷 Фото'}</div>
                                 </div>
                             </div>
                         `).join('')}
-                        ${userMessages.length === 0 ? '<div class="empty-state">💬 Нет сообщений. Напишите кому-нибудь!</div>' : ''}
+                        ${dialogs.length === 0 ? '<div class="empty-state">💬 Нет сообщений. Найдите пользователя в поиске 🔍</div>' : ''}
                     </div>
                 </div>
             `;
@@ -936,7 +948,7 @@
                 <div class="content">
                     <h3 style="margin-bottom: 15px;">🔍 Поиск пользователей</h3>
                     <div class="search-container">
-                        <input type="text" id="searchInput" class="search-input" placeholder="Введите имя или username...">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Введите username или имя...">
                         <button class="search-btn" onclick="searchUsers()">Найти</button>
                     </div>
                     <div id="searchResults" class="user-list"></div>
@@ -968,7 +980,7 @@
                         <div class="user-item-info">
                             <div class="user-item-name">${escapeHtml(u.name)}</div>
                             <div class="user-item-username">@${escapeHtml(u.username)}</div>
-                            <button class="edit-profile-btn" style="margin-top:5px; padding:5px 15px; font-size:12px;" onclick="event.stopPropagation(); startChat('${u.id}')">💬 Написать</button>
+                            <button class="edit-profile-btn" style="margin-top:8px; padding:6px 16px; font-size:12px;" onclick="event.stopPropagation(); startChat('${u.id}')">💬 Написать</button>
                         </div>
                     </div>
                 `).join('');
@@ -995,6 +1007,7 @@
                         <div class="profile-header">
                             <img class="profile-avatar" src="${currentUser.avatar || `https://ui-avatars.com/api/?background=ff6b6b&color=fff&bold=true&size=100&name=${encodeURIComponent(currentUser.name)}`}">
                             <div class="profile-name">${escapeHtml(currentUser.name)}</div>
+                            <div class="profile-bio" style="font-size:12px;">@${escapeHtml(currentUser.username)}</div>
                             <div class="profile-bio">${escapeHtml(currentUser.bio)}</div>
                             <button class="edit-profile-btn" onclick="editProfile()">✏️ Редактировать</button>
                             <button class="message-user-btn" onclick="logout()">🚪 Выйти</button>
@@ -1076,11 +1089,11 @@
             const isLiked = post.likes.includes(currentUser.id);
             
             div.innerHTML = `
-                <div class="post-header" onclick="viewUserProfile('${post.userId}')">
+                <div class="post-header">
                     <img class="post-avatar" src="${post.userAvatar}">
                     <div class="post-info">
                         <div class="post-name">${escapeHtml(post.userName)}</div>
-                        <div class="post-time">${formatDate(new Date(post.createdAt))}</div>
+                        <div class="post-time" style="font-size:10px;">@${escapeHtml(post.userUsername)} • ${formatDate(new Date(post.createdAt))}</div>
                     </div>
                 </div>
                 <div class="post-text">${escapeHtml(post.text)}</div>
@@ -1088,7 +1101,7 @@
                 <div class="post-stats">
                     <button class="stat-btn" onclick="toggleLike('${post.id}')">${isLiked ? '❤️' : '🤍'} ${post.likes.length || ''}</button>
                     ${post.userId === currentUser.id ? `<button class="stat-btn" onclick="deletePost('${post.id}')">🗑️</button>` : ''}
-                    <button class="stat-btn" onclick="startChatFromPost('${post.userId}')">💬</button>
+                    <button class="stat-btn" onclick="startChat('${post.userId}')">💬</button>
                 </div>
             `;
             return div;
@@ -1102,10 +1115,6 @@
             }
         }
 
-        function viewUserProfile(userId) {
-            if (userId === currentUser.id) showProfile();
-        }
-
         function goHome() {
             if (currentChatUser) {
                 currentChatUser = null;
@@ -1115,11 +1124,12 @@
             }
         }
 
-        function refreshFeed() {
+        function refreshCurrentView() {
             if (currentView === 'feed') renderFeed();
             else if (currentView === 'messages' && !currentChatUser) showMessages();
-            else if (currentView === 'search') searchUsers();
+            else if (currentView === 'search') { const input = document.getElementById('searchInput'); if (input && input.value) searchUsers(); }
             else if (currentView === 'profile') showProfile();
+            else if (currentChatUser) renderChat();
         }
 
         function formatDate(date) {
