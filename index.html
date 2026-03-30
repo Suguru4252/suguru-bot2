@@ -560,6 +560,16 @@
         }
 
         input[type="file"] { display: none; }
+        
+        .username-code {
+            background: rgba(255,107,107,0.2);
+            padding: 8px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-top: 10px;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
@@ -587,9 +597,9 @@
     <script>
         // ========== ГЛОБАЛЬНЫЕ КЛЮЧИ ==========
         const STORAGE_KEYS = {
-            USERS: 'chugur_users_final',
-            POSTS: 'chugur_posts_final',
-            MESSAGES: 'chugur_messages_final'
+            USERS: 'chugur_users_auto',
+            POSTS: 'chugur_posts_auto',
+            MESSAGES: 'chugur_messages_auto'
         };
 
         // ========== ДАННЫЕ ==========
@@ -601,6 +611,20 @@
         let currentView = 'feed';
         let updateInterval = null;
 
+        // ========== ГЕНЕРАЦИЯ УНИКАЛЬНОГО USERNAME ==========
+        function generateUniqueUsername() {
+            let existingUsernames = users.map(u => u.username);
+            let number;
+            let username;
+            
+            do {
+                number = Math.floor(Math.random() * 90) + 10; // от 10 до 99
+                username = `user${number}`;
+            } while (existingUsernames.includes(username));
+            
+            return username;
+        }
+
         // ========== ЗАГРУЗКА ДАННЫХ ==========
         function loadData() {
             const savedUsers = localStorage.getItem(STORAGE_KEYS.USERS);
@@ -609,9 +633,9 @@
             
             if (savedUsers) {
                 users = JSON.parse(savedUsers);
-                console.log('✅ Загружено пользователей:', users.length, users.map(u => u.username));
+                console.log('✅ Загружено пользователей:', users.length);
             } else {
-                // Начальный пользователь
+                // Создаем демо-пользователя
                 users = [{
                     id: '1',
                     username: 'admin',
@@ -621,7 +645,6 @@
                     bio: 'Добро пожаловать в Chugur!'
                 }];
                 localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-                console.log('📝 Создан начальный пользователь: admin');
             }
             
             if (savedPosts) {
@@ -643,7 +666,6 @@
             localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messages));
             console.log('💾 Данные сохранены. Всего пользователей:', users.length);
             
-            // Отправляем событие для обновления других вкладок
             window.dispatchEvent(new StorageEvent('storage', {
                 key: 'chugur_data_update',
                 newValue: Date.now().toString()
@@ -653,19 +675,12 @@
         // Синхронизация между вкладками
         window.addEventListener('storage', function(e) {
             if (e.key === 'chugur_data_update') {
-                console.log('🔄 Синхронизация данных...');
                 const savedUsers = localStorage.getItem(STORAGE_KEYS.USERS);
                 if (savedUsers) {
                     users = JSON.parse(savedUsers);
-                    console.log('🔄 Обновлено. Пользователей:', users.length);
                 }
                 if (currentView === 'search') {
-                    const searchInput = document.getElementById('searchInput');
-                    if (searchInput && searchInput.value) {
-                        searchUsers();
-                    } else {
-                        showSearch();
-                    }
+                    showSearch();
                 }
                 refreshCurrentView();
             }
@@ -698,8 +713,7 @@
                 <div class="auth-section">
                     <div class="auth-card">
                         <h2 style="margin-bottom: 20px;">📝 Создать аккаунт</h2>
-                        <input type="text" id="regUsername" class="auth-input" placeholder="Придумайте username (например: john)">
-                        <input type="password" id="regPassword" class="auth-input" placeholder="Пароль">
+                        <input type="password" id="regPassword" class="auth-input" placeholder="Придумайте пароль">
                         <input type="text" id="regName" class="auth-input" placeholder="Ваше имя">
                         <button class="auth-btn" onclick="register()">Зарегистрироваться</button>
                         <div class="switch-auth" onclick="renderAuth()">← Назад</div>
@@ -708,40 +722,22 @@
             `;
         }
 
-        function login() {
-            const username = document.getElementById('loginUsername').value.trim().toLowerCase();
-            const password = document.getElementById('loginPassword').value;
-            
-            const user = users.find(u => u.username === username && u.password === password);
-            
-            if (user) {
-                currentUser = JSON.parse(JSON.stringify(user));
-                localStorage.setItem('chugur_current_user_final', JSON.stringify(currentUser));
-                startApp();
-            } else {
-                alert('❌ Неверный username или пароль');
-            }
-        }
-
         function register() {
-            const username = document.getElementById('regUsername').value.trim().toLowerCase();
             const password = document.getElementById('regPassword').value;
             const name = document.getElementById('regName').value.trim();
             
-            if (!username || !password) {
-                alert('❌ Заполните все поля');
+            if (!password) {
+                alert('❌ Введите пароль');
                 return;
             }
             
-            if (username.length < 2) {
-                alert('❌ Username должен быть не менее 2 символов');
+            if (password.length < 3) {
+                alert('❌ Пароль должен быть не менее 3 символов');
                 return;
             }
             
-            if (users.find(u => u.username === username)) {
-                alert('❌ Пользователь с таким username уже существует!');
-                return;
-            }
+            // Генерируем уникальный username
+            const username = generateUniqueUsername();
             
             const newUser = {
                 id: Date.now().toString(),
@@ -755,14 +751,29 @@
             users.push(newUser);
             saveData();
             currentUser = newUser;
-            localStorage.setItem('chugur_current_user_final', JSON.stringify(currentUser));
+            localStorage.setItem('chugur_current_user_auto', JSON.stringify(currentUser));
             startApp();
-            alert(`✅ Аккаунт создан! Ваш username: ${username}\nТеперь другие пользователи смогут найти вас по этому username.`);
+            alert(`✅ Аккаунт создан!\n\n🔑 Ваш username: ${username}\n🔐 Пароль: ${password}\n\nЗапомните эти данные для входа!`);
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+            
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = JSON.parse(JSON.stringify(user));
+                localStorage.setItem('chugur_current_user_auto', JSON.stringify(currentUser));
+                startApp();
+            } else {
+                alert('❌ Неверный username или пароль');
+            }
         }
 
         function logout() {
             currentUser = null;
-            localStorage.removeItem('chugur_current_user_final');
+            localStorage.removeItem('chugur_current_user_auto');
             if (updateInterval) clearInterval(updateInterval);
             renderAuth();
         }
@@ -948,7 +959,7 @@
                 <div class="chat-container">
                     <div style="padding:15px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.1);">
                         <strong>${escapeHtml(currentChatUser.name)}</strong><br>
-                        <span style="opacity:0.6; font-size:12px;">@${escapeHtml(currentChatUser.username)}</span>
+                        <span style="opacity:0.6; font-size:12px;">${escapeHtml(currentChatUser.username)}</span>
                     </div>
                     <div class="chat-messages" id="chatMessages"></div>
                     <div id="chatImagePreview" style="padding:0 15px; display:none;"></div>
@@ -1018,7 +1029,7 @@
                                 <img class="user-item-avatar" src="${d.user.avatar || `https://ui-avatars.com/api/?background=ff6b6b&color=fff&bold=true&size=50&name=${encodeURIComponent(d.user.name)}`}">
                                 <div class="user-item-info">
                                     <div class="user-item-name">${escapeHtml(d.user.name)} ${d.unread > 0 ? `<span style="background:#ff6b6b; padding:2px 6px; border-radius:10px; font-size:10px; margin-left:5px;">${d.unread}</span>` : ''}</div>
-                                    <div class="user-item-username">@${escapeHtml(d.user.username)}</div>
+                                    <div class="user-item-username" style="font-size:11px;">${escapeHtml(d.user.username)}</div>
                                     <div style="font-size:12px; opacity:0.6;">${d.lastMsg.text ? (d.lastMsg.text.length > 30 ? d.lastMsg.text.slice(0,30)+'...' : d.lastMsg.text) : '📷 Фото'}</div>
                                 </div>
                             </div>
@@ -1038,21 +1049,20 @@
             if (currentChatUser) renderChat();
         }
 
-        // ========== ПОИСК (ИСПРАВЛЕН) ==========
+        // ========== ПОИСК ==========
         function showSearch() {
             currentView = 'search';
             document.getElementById('headerBtn').style.display = 'flex';
             const oldBack = document.querySelector('.back-btn');
             if (oldBack) oldBack.remove();
             
-            // Показываем всех пользователей сразу
             const allUsers = users.filter(u => u.id !== currentUser?.id);
             
             document.getElementById('mainContent').innerHTML = `
                 <div class="content">
-                    <h3 style="margin-bottom: 15px;">🔍 Поиск пользователей</h3>
+                    <h3 style="margin-bottom: 15px;">🔍 Все пользователи</h3>
                     <div class="search-container">
-                        <input type="text" id="searchInput" class="search-input" placeholder="Введите username или имя...">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Поиск по имени или username...">
                         <button class="search-btn" onclick="searchUsers()">Найти</button>
                     </div>
                     <div style="margin: 10px 0 5px; font-size:12px; opacity:0.6;">Всего пользователей: ${users.length - 1}</div>
@@ -1062,7 +1072,7 @@
                                 <img class="user-item-avatar" src="${u.avatar || `https://ui-avatars.com/api/?background=ff6b6b&color=fff&bold=true&size=50&name=${encodeURIComponent(u.name)}`}">
                                 <div class="user-item-info">
                                     <div class="user-item-name">${escapeHtml(u.name)}</div>
-                                    <div class="user-item-username">@${escapeHtml(u.username)}</div>
+                                    <div class="user-item-username">${escapeHtml(u.username)}</div>
                                     <button class="edit-profile-btn" style="margin-top:8px; padding:6px 16px; font-size:12px;" onclick="event.stopPropagation(); startChat('${u.id}')">💬 Написать</button>
                                 </div>
                             </div>
@@ -1099,7 +1109,7 @@
                         <img class="user-item-avatar" src="${u.avatar || `https://ui-avatars.com/api/?background=ff6b6b&color=fff&bold=true&size=50&name=${encodeURIComponent(u.name)}`}">
                         <div class="user-item-info">
                             <div class="user-item-name">${escapeHtml(u.name)}</div>
-                            <div class="user-item-username">@${escapeHtml(u.username)}</div>
+                            <div class="user-item-username">${escapeHtml(u.username)}</div>
                             <button class="edit-profile-btn" style="margin-top:8px; padding:6px 16px; font-size:12px;" onclick="event.stopPropagation(); startChat('${u.id}')">💬 Написать</button>
                         </div>
                     </div>
@@ -1127,8 +1137,8 @@
                         <div class="profile-header">
                             <img class="profile-avatar" src="${currentUser.avatar || `https://ui-avatars.com/api/?background=ff6b6b&color=fff&bold=true&size=100&name=${encodeURIComponent(currentUser.name)}`}">
                             <div class="profile-name">${escapeHtml(currentUser.name)}</div>
-                            <div class="profile-bio" style="font-size:12px;">@${escapeHtml(currentUser.username)}</div>
-                            <div class="profile-bio">${escapeHtml(currentUser.bio)}</div>
+                            <div class="profile-bio" style="font-size:12px; background:rgba(255,107,107,0.2); padding:5px 10px; border-radius:20px; display:inline-block;">${escapeHtml(currentUser.username)}</div>
+                            <div class="profile-bio" style="margin-top:10px;">${escapeHtml(currentUser.bio)}</div>
                             <button class="edit-profile-btn" onclick="editProfile()">✏️ Редактировать</button>
                             <button class="message-user-btn" onclick="logout()">🚪 Выйти</button>
                         </div>
@@ -1164,7 +1174,7 @@
             const idx = users.findIndex(u => u.id === currentUser.id);
             if (idx !== -1) users[idx] = currentUser;
             saveData();
-            localStorage.setItem('chugur_current_user_final', JSON.stringify(currentUser));
+            localStorage.setItem('chugur_current_user_auto', JSON.stringify(currentUser));
             showProfile();
         }
 
@@ -1213,7 +1223,7 @@
                     <img class="post-avatar" src="${post.userAvatar}">
                     <div class="post-info">
                         <div class="post-name">${escapeHtml(post.userName)}</div>
-                        <div class="post-time" style="font-size:10px;">@${escapeHtml(post.userUsername)} • ${formatDate(new Date(post.createdAt))}</div>
+                        <div class="post-time" style="font-size:10px;">${escapeHtml(post.userUsername)} • ${formatDate(new Date(post.createdAt))}</div>
                     </div>
                 </div>
                 <div class="post-text">${escapeHtml(post.text)}</div>
@@ -1239,14 +1249,7 @@
         function refreshCurrentView() {
             if (currentView === 'feed') renderFeed();
             else if (currentView === 'messages' && !currentChatUser) showMessages();
-            else if (currentView === 'search') { 
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput && searchInput.value) {
-                    searchUsers();
-                } else {
-                    showSearch();
-                }
-            }
+            else if (currentView === 'search') showSearch();
             else if (currentView === 'profile') showProfile();
             else if (currentChatUser) renderChat();
             updateMessageBadge();
@@ -1281,7 +1284,7 @@
 
         // ========== ЗАПУСК ==========
         loadData();
-        const savedUser = localStorage.getItem('chugur_current_user_final');
+        const savedUser = localStorage.getItem('chugur_current_user_auto');
         if (savedUser) {
             const parsed = JSON.parse(savedUser);
             currentUser = users.find(u => u.id === parsed.id);
